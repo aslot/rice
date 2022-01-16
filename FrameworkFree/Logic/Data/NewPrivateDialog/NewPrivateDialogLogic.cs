@@ -4,16 +4,16 @@ namespace Data
     using System;
     internal sealed class NewPrivateDialogLogic : INewPrivateDialogLogic
     {
-        public readonly IStorage Storage;
-        public readonly IAccountLogic AccountLogic;
-        public readonly IPrivateMessageLogic PrivateMessageLogic;
-        public readonly IThreadLogic ThreadLogic;
-        public readonly IReplyLogic ReplyLogic;
-        public readonly IRegistrationLogic RegistrationLogic;
-        public readonly INewTopicLogic NewTopicLogic;
-        public readonly NewPrivateDialogMarkupHandler NewPrivateDialogMarkupHandler;
-        public readonly PrivateDialogMarkupHandler PrivateDialogMarkupHandler;
-        public readonly PrivateMessageMarkupHandler PrivateMessageMarkupHandler;
+        private readonly IStorage Storage;
+        private readonly IAccountLogic AccountLogic;
+        private readonly IPrivateMessageLogic PrivateMessageLogic;
+        private readonly IThreadLogic ThreadLogic;
+        private readonly IReplyLogic ReplyLogic;
+        private readonly IRegistrationLogic RegistrationLogic;
+        private readonly INewTopicLogic NewTopicLogic;
+        private readonly NewPrivateDialogMarkupHandler NewPrivateDialogMarkupHandler;
+        private readonly PrivateDialogMarkupHandler PrivateDialogMarkupHandler;
+        private readonly PrivateMessageMarkupHandler PrivateMessageMarkupHandler;
         public NewPrivateDialogLogic(IStorage storage,
         IAccountLogic accountLogic,
         IPrivateMessageLogic privateMessageLogic,

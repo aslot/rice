@@ -9,7 +9,7 @@ namespace App.Controllers
 {
     public sealed class fController : Controller
     {
-        public readonly IFriendlyFire Force;
+        private readonly IFriendlyFire Force;
         public fController(IFriendlyFire force)
         {
             Force = force;

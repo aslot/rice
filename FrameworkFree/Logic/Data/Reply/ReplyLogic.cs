@@ -23,7 +23,7 @@ namespace Data
             ReplyMarkupHandler = replyMarkupHandler;
             ThreadMarkupHandler = threadMarkupHandler;
         }
-        internal void
+        private void
             CheckReplyAndPublish(in int id, in Pair pair, in string text)
         {
             if (Check(id, text))

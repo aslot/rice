@@ -1,10 +1,6 @@
-using System.Drawing.Imaging;
-using System.Drawing.Drawing2D;
 using System.IO;
-using System.Drawing;
 using System;
-using System.Linq;
-using System.Text;
+using SkiaSharp;
 using MarkupHandlers;
 using Models;
 namespace Data
@@ -109,62 +105,20 @@ namespace Data
                                     .GetOwnProfilePrimaryUnfilledMarkup(accountId));
             }
         }
-        [Obsolete("Не работает на reg.ru на 17.10.2021.")]
-        private byte[] ScaleAndFilterImage(in byte[] file)
-        {
-            try
-            {
-                Bitmap image;
 
-                using (var ms = new MemoryStream(file))
-                {
-                    image = new Bitmap(ms);
-                }
-                PixelFormat pixelFormat = image.PixelFormat;
-                var resized = new Bitmap(Constants.ProfileImageWidthPixels,
-                Constants.ProfileImageHeightPixels, pixelFormat);
-
-                using (var graphics = Graphics.FromImage(resized))
-                {
-                    graphics.CompositingQuality = CompositingQuality.HighSpeed;
-                    graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
-                    graphics.CompositingMode = CompositingMode.SourceCopy;
-                    graphics.DrawImage(image, 0, 0, Constants.ProfileImageWidthPixels,
-                        Constants.ProfileImageHeightPixels);
-
-                    var qualityParamId = System.Drawing.Imaging.Encoder.Quality;
-                    var encoderParameters = new EncoderParameters(1);
-                    encoderParameters.Param[0] = new EncoderParameter(qualityParamId, 100);
-                    var codec = ImageCodecInfo.GetImageDecoders()
-                        .FirstOrDefault(codec => codec.FormatID == ImageFormat.Jpeg.Guid);
-
-                    using (var ms = new MemoryStream())
-                    {
-                        resized.Save(ms, codec, encoderParameters);
-                        image.Dispose();
-                        resized.Dispose();
-                        return ms.ToArray();
-                    }
-                }
-            }
-            catch
-            {
-                return Encoding.UTF8.GetBytes(Constants.SE);
-            }
-        }
         private byte[] ScaleImageTest(in byte[] file)
         {
-            Bitmap image;
+            SKBitmap image;
 
             using (var ms = new MemoryStream(file))
-                image = new Bitmap(ms);
-            var newSize = new Size(Constants.ProfileImageWidthPixels,
-            Constants.ProfileImageHeightPixels);
-            image = new Bitmap(image, newSize);
+                image = SKBitmap.Decode(ms);
+            image = image.Resize(new SKSizeI(
+                Constants.ProfileImageWidthPixels,
+            Constants.ProfileImageHeightPixels), SKFilterQuality.High);
 
             using (var ms = new MemoryStream())
             {
-                image.Save(ms, ImageFormat.Jpeg);
+                image.Encode(SKEncodedImageFormat.Jpeg, 100).SaveTo(ms);
                 image.Dispose();
 
                 return ms.ToArray();

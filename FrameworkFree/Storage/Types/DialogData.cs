@@ -1,8 +1,9 @@
-namespace Data {
+namespace Data
+{
     public struct DialogData
-        {
-            internal string acceptorNick;
-            internal Pair? pair;
-            internal string message;
-        }
+    {
+        internal string acceptorNick;
+        internal Pair? pair;
+        internal string message;
+    }
 }

@@ -51,7 +51,7 @@ namespace Data
             }
         }
 
-        internal void AddThread(in int number)
+        private void AddThread(in int number)
         {
             int count = Storage.Slow.CountMessagesByAmount(number);
 

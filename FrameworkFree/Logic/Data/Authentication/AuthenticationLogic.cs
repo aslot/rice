@@ -6,7 +6,7 @@ namespace Data
     internal sealed class AuthenticationLogic : IAuthenticationLogic
     {
         private static readonly object locker = new object();
-        public readonly IStorage Storage;
+        private readonly IStorage Storage;
         public AuthenticationLogic(IStorage storage)
         {
             Storage = storage;

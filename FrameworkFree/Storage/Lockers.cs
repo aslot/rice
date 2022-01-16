@@ -2,6 +2,7 @@ namespace Data.DataLockers
 {
     internal static class Lockers // использовать только в Storage - все lock переместить сюда
     {
+        internal static readonly object RandomLocker = new object();
         internal static readonly object InitializationTransactionLocker = new object();
         internal static readonly object BlockedRemoteIpsHashesLocker = new object();
         internal static readonly object AccountIdentifierRemoteIpLogLocker = new object();

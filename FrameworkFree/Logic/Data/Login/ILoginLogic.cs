@@ -3,7 +3,7 @@ namespace Data
 {
     public interface ILoginLogic
     {
-        void InitPage();
+        void InitPageByTimer();
         string CheckAndAuth
         (in IPAddress ip, in string captcha, in string login, in string password);
     }

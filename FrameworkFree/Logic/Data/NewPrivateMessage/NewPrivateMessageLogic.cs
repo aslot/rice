@@ -5,11 +5,11 @@
     using System.Linq;
     internal sealed class NewPrivateMessageLogic : INewPrivateMessageLogic
     {
-        public readonly IStorage Storage;
-        public readonly IThreadLogic ThreadLogic;
-        public readonly IReplyLogic ReplyLogic;
-        public readonly NewPrivateMessageMarkupHandler NewPrivateMessageMarkupHandler;
-        public readonly PrivateMessageMarkupHandler PrivateMessageMarkupHandler;
+        private readonly IStorage Storage;
+        private readonly IThreadLogic ThreadLogic;
+        private readonly IReplyLogic ReplyLogic;
+        private readonly NewPrivateMessageMarkupHandler NewPrivateMessageMarkupHandler;
+        private readonly PrivateMessageMarkupHandler PrivateMessageMarkupHandler;
         public NewPrivateMessageLogic(IStorage storage,
         IThreadLogic threadLogic,
         IReplyLogic replyLogic,

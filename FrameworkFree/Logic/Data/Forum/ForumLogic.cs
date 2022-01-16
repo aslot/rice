@@ -3,8 +3,8 @@ namespace Data
 {
     internal sealed class ForumLogic : IForumLogic
     {
-        public readonly IStorage Storage;
-        public readonly ForumMarkupHandler ForumMarkupHandler;
+        private readonly IStorage Storage;
+        private readonly ForumMarkupHandler ForumMarkupHandler;
         public ForumLogic(IStorage storage, ForumMarkupHandler forumMarkupHandler)
         {
             Storage = storage;

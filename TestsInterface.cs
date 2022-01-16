@@ -48,8 +48,14 @@ namespace TestsInterface
                 privateMessageMarkupHandler);
                 var forumLogic = new ForumLogic(storage,
                 forumMarkupHandler);
+                var captchaGenerator = new CaptchaGenerator();
+                var captchaMarkupHandler = new CaptchaMarkupHandler();
+                var captcha = new Captcha(captchaGenerator,
+                storage,
+                captchaMarkupHandler);
                 var registrationLogic = new RegistrationLogic(storage,
-                registrationMarkupHandler);
+                registrationMarkupHandler,
+                captcha);
                 var sectionLogic = new SectionLogic(storage,
                 sectionMarkupHandler,
                 newTopicMarkupHandler);
@@ -79,9 +85,8 @@ namespace TestsInterface
                 registrationLogic,
                 accountLogic,
                 authenticationLogic,
+                captcha,
                 loginMarkupHandler);
-                var captcha = new Captcha(loginLogic,
-                registrationLogic);
                 var profileLogic = new ProfileLogic(storage,
                 profileMarkupHandler);
 

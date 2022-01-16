@@ -10,11 +10,14 @@ namespace Data
     {
         private readonly IStorage Storage;
         private readonly RegistrationMarkupHandler RegistrationMarkupHandler;
+        private readonly Captcha Captcha;
         public RegistrationLogic(IStorage storage,
-            RegistrationMarkupHandler registrationMarkupHandler)
+            RegistrationMarkupHandler registrationMarkupHandler,
+            Captcha captcha)
         {
             Storage = storage;
             RegistrationMarkupHandler = registrationMarkupHandler;
+            Captcha = captcha;
         }
         public void PreRegistration
             (in string captcha, in string login, in string password, in string email, in string nick)
@@ -35,17 +38,6 @@ namespace Data
 
         private static readonly object locker = new object();
 
-        public void InitPage()
-        {
-            var captchaData = Captcha.GenerateCaptchaStringAndImage();
-            Storage.Fast.CaptchaMessagesRegistrationDataEnqueue(captchaData.stringHash);
-
-            if (Storage.Fast.GetCaptchaMessagesRegistrationDataCount()
-                == Constants.RegistrationPagesCount)
-                Storage.Fast.CaptchaMessagesRegistrationDataDequeue();
-            Storage.Fast.SetPageToReturnRegistrationData(RegistrationMarkupHandler
-                .GetPageToReturnRegistrationData(captchaData.image));
-        }
         public void RegisterInBaseByTimer()
         {
             int len = Storage.Fast.GetRegistrationLineCount();
@@ -95,6 +87,18 @@ namespace Data
                         );
                 }
             }
+        }
+
+        public void RefreshLogRegPagesByTimer()
+        {
+            var captchaData = Captcha.GenerateCaptchaStringAndImage();
+            Storage.Fast.CaptchaMessagesRegistrationDataEnqueue(captchaData.stringHash);
+
+            if (Storage.Fast.GetCaptchaMessagesRegistrationDataCount()
+                == Constants.RegistrationPagesCount)
+                Storage.Fast.CaptchaMessagesRegistrationDataDequeue();
+            Storage.Fast.SetPageToReturnRegistrationData(RegistrationMarkupHandler
+                .GetPageToReturnRegistrationData(captchaData.image));
         }
 
         private bool Register

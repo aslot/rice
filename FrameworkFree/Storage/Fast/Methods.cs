@@ -635,10 +635,21 @@ namespace Data
             lock (PreSaveProfilesLineLocker)
                 return PreSaveProfilesLine.Dequeue();
         }
+        public char GetNextRandomCaptchaSymbol()
+        {
+            lock (RandomLocker)
+                return Constants.CaptchaLetters[Random.Next(Constants.CaptchaLetters.Length - Constants.One)];
+        }
         public void InitializePreSaveProfilesLine()
         {
             lock (PreSaveProfilesLineLocker)
                 PreSaveProfilesLine = new Queue<PreProfile>();
+        }
+
+        public void InitializeRandom()
+        {
+            lock (RandomLocker)
+                Random = new Random();
         }
         public TopicData TopicsToStartDequeue()
         {

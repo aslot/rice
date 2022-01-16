@@ -6,25 +6,25 @@ using System.Net;
 using static Data.DataLockers.Lockers;
 namespace Data
 {//временная замена Storage - проброс вызовов - Slow делает Fast = Slow
-    public sealed class FriendlyFire : IFriendlyFire
+    internal sealed class FriendlyFire : IFriendlyFire
     {
-        public readonly IPrivateDialogLogic PrivateDialogLogic;
-        public readonly IPrivateMessageLogic PrivateMessageLogic;
-        public readonly IAccountLogic AccountLogic;
-        public readonly IEndPointLogic EndPointLogic;
-        public readonly IForumLogic ForumLogic;
-        public readonly IStorage Storage;
-        public readonly INewPrivateDialogLogic NewPrivateDialogLogic;
-        public readonly INewPrivateMessageLogic NewPrivateMessageLogic;
-        public readonly ISectionLogic SectionLogic;
-        public readonly INewTopicLogic NewTopicLogic;
-        public readonly IThreadLogic ThreadLogic;
-        public readonly IReplyLogic ReplyLogic;
-        public readonly IRegistrationLogic RegistrationLogic;
-        public readonly ILoginLogic LoginLogic;
-        public readonly Captcha Captcha;
-        public readonly IAuthenticationLogic AuthenticationLogic;
-        public readonly IProfileLogic ProfileLogic;
+        private readonly IPrivateDialogLogic PrivateDialogLogic;
+        private readonly IPrivateMessageLogic PrivateMessageLogic;
+        private readonly IAccountLogic AccountLogic;
+        private readonly IEndPointLogic EndPointLogic;
+        private readonly IForumLogic ForumLogic;
+        private readonly IStorage Storage;
+        private readonly INewPrivateDialogLogic NewPrivateDialogLogic;
+        private readonly INewPrivateMessageLogic NewPrivateMessageLogic;
+        private readonly ISectionLogic SectionLogic;
+        private readonly INewTopicLogic NewTopicLogic;
+        private readonly IThreadLogic ThreadLogic;
+        private readonly IReplyLogic ReplyLogic;
+        private readonly IRegistrationLogic RegistrationLogic;
+        private readonly ILoginLogic LoginLogic;
+        private readonly Captcha Captcha;
+        private readonly IAuthenticationLogic AuthenticationLogic;
+        private readonly IProfileLogic ProfileLogic;
         public FriendlyFire(IAccountLogic accountLogic,
         IStorage storage,
         IEndPointLogic endPointLogic,
@@ -64,6 +64,7 @@ namespace Data
         }
         public void FillStorage()
         { // перед изменением порядка следования проверять корректность правки
+            Storage.Fast.InitializeRandom();
             AccountLogic.LoadAccounts();
             AccountLogic.LoadNicks();
             ForumLogic.LoadMainPage();
@@ -96,7 +97,8 @@ namespace Data
             {
                 Storage.Fast.SetTimerIsWorkingFlag();
                 AuthenticationLogic.FlushAccountIdentifierRemoteIpLogByTimer();
-                Captcha.RefreshLogRegPagesByTimer();
+                LoginLogic.InitPageByTimer();
+                RegistrationLogic.RefreshLogRegPagesByTimer();
                 AccountLogic.CheckAccountIdByTimer();
                 RegistrationLogic.RegisterInBaseByTimer();
                 NewTopicLogic.StartNextTopicByTimer();

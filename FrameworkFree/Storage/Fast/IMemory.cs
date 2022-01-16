@@ -141,6 +141,8 @@ namespace Data
         void AddOrUpdatePublicProfilePage(in int accountId, in string page);
         void MessagesToPublishEnqueue(in MessageData messageData);
         MessageData MessagesToPublishDequeue();
+        char GetNextRandomCaptchaSymbol();
+        void InitializeRandom();
         void InitializeOwnProfilePages();
         void InitializePublicProfilePages();
         int GetLoginPasswordAccIdHashes(in Pair pair);

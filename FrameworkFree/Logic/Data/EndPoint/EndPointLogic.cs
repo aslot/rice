@@ -5,8 +5,8 @@ namespace Data
 {
     internal sealed class EndPointLogic : IEndPointLogic
     {
-        public readonly IStorage Storage;
-        public readonly EndPointMarkupHandler EndPointMarkupHandler;
+        private readonly IStorage Storage;
+        private readonly EndPointMarkupHandler EndPointMarkupHandler;
         public EndPointLogic(IStorage storage, EndPointMarkupHandler endPointMarkupHandler)
         {
             Storage = storage;

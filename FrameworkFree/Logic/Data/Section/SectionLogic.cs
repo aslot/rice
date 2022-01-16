@@ -5,7 +5,7 @@ namespace Data
 {
     internal sealed class SectionLogic : ISectionLogic
     {
-        public readonly IStorage Storage;
+        private readonly IStorage Storage;
         private readonly SectionMarkupHandler SectionMarkupHandler;
         private readonly NewTopicMarkupHandler NewTopicMarkupHandler;
         public SectionLogic(IStorage storage,

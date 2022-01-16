@@ -6,11 +6,11 @@ namespace Data
 {
     internal sealed class NewTopicLogic : INewTopicLogic
     {
-        public readonly IStorage Storage;
-        public readonly ISectionLogic SectionLogic;
-        public readonly IThreadLogic ThreadLogic;
-        public readonly IReplyLogic ReplyLogic;
-        public readonly NewTopicMarkupHandler NewTopicMarkupHandler;
+        private readonly IStorage Storage;
+        private readonly ISectionLogic SectionLogic;
+        private readonly IThreadLogic ThreadLogic;
+        private readonly IReplyLogic ReplyLogic;
+        private readonly NewTopicMarkupHandler NewTopicMarkupHandler;
         private readonly SectionMarkupHandler SectionMarkupHandler;
         public NewTopicLogic(IStorage storage,
         ISectionLogic sectionLogic,

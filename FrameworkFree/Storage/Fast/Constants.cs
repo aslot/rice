@@ -97,11 +97,13 @@ namespace Data
         public const int MaxProfileImageSizeBytes = 500 * 1024;
         public const byte MaxAttemptsCountPerIp = byte.MaxValue;
         public const byte ProfileQuestionsCount = 25;
+        public const byte CaptchaLength = 4;
         public const short MinProfileImageSizeBytes = 1024;
         public const short ProfileImageHeightPixels = 809;
         public const short ProfileImageWidthPixels = 500;
         public const string Checked = " checked";
         public const string Yes = " Да.";
         public const string No = " Нет.";
+        public const string CaptchaLetters = "12456789АБВГДЕЖИКЛМНПРСТУФХЦЧШЭЮЯ";
     }
 }

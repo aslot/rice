@@ -4,6 +4,7 @@ namespace Data
 {
     public sealed partial class Memory
     {
+        public static Random Random;
         public static
             Dictionary<Pair, int> LoginPasswordAccIdHashes;
         public static
@@ -17,8 +18,8 @@ namespace Data
         private static
             Dictionary<OwnerId, Dictionary<CompanionId, int>> PersonalPagesDepths;
 
-        internal static Dictionary<int, RegBag> RegistrationLine;
-        internal static Dictionary<int, PreRegBag> PreRegistrationLine;
+        private static Dictionary<int, RegBag> RegistrationLine;
+        private static Dictionary<int, PreRegBag> PreRegistrationLine;
         public static Queue<DialogData> DialogsToStart;
         public static Queue<MessageData> PersonalMessagesToPublish;
         public static Queue<MessageData> MessagesToPublish;

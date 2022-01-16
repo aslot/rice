@@ -6,9 +6,9 @@ namespace Data
 {
     internal sealed class PrivateDialogLogic : IPrivateDialogLogic
     {
-        public readonly IStorage Storage;
-        public readonly IReplyLogic ReplyLogic;
-        public readonly PrivateDialogMarkupHandler PrivateDialogMarkupHandler;
+        private readonly IStorage Storage;
+        private readonly IReplyLogic ReplyLogic;
+        private readonly PrivateDialogMarkupHandler PrivateDialogMarkupHandler;
         private static readonly object locker = new object();
         public PrivateDialogLogic(IStorage storage,
         IReplyLogic replyLogic,

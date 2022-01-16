@@ -4,10 +4,10 @@ namespace Data
 {
     internal sealed class PrivateMessageLogic : IPrivateMessageLogic
     {
-        public readonly IStorage Storage;
-        public readonly IThreadLogic ThreadLogic;
-        public readonly IReplyLogic ReplyLogic;
-        public readonly PrivateMessageMarkupHandler PrivateMessageMarkupHandler;
+        private readonly IStorage Storage;
+        private readonly IThreadLogic ThreadLogic;
+        private readonly IReplyLogic ReplyLogic;
+        private readonly PrivateMessageMarkupHandler PrivateMessageMarkupHandler;
         public PrivateMessageLogic(IStorage storage,
         IThreadLogic threadLogic,
         IReplyLogic replyLogic,

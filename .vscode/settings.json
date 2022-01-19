@@ -1,0 +1,5 @@
+{
+    "diffEditor.codeLens": true,
+    "editor.autoIndent": "full",
+    "editor.formatOnSave": true
+}

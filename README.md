@@ -4,6 +4,9 @@
 
 ### Версия 1.0.0.1 для asp.net core 6
 
+Для использования в Linux необходимо установить пакет libgdiplus. Пример команды установки:<br>
+sudo apt-get install libgdiplus
+
 Пример команды публикации: <br>
 dotnet publish -r win-x86 -p:PublishSingleFile=false -p:PublishTrimmed=false --self-contained false -c Release
 

@@ -31,13 +31,7 @@
 
 Код опубликован на самом дешёвом российском shared-хостинге по адресу <a href="https://форумлюбви.рф">https://форумлюбви.рф</a>
 
-Ветвь net5_0 - версия 1.0.0.0 beta для asp.net core 5.<br>
-Ветвь net6_0 - версия 1.0.0.1 для asp.net core 6<br>
-
 Код в папке FrameworkFree не привязан к фреймворку asp.net, поэтому может быть подключен к HttpListener, что должно повысить быстродействие, но хостинг при этом выйдет дороже.<br>
-
-Для использования в Linux необходимо установить пакет libgdiplus. Пример команды установки:<br>
-sudo apt-get install libgdiplus
 
 Пример команды публикации: <br>
 dotnet publish -r win-x86 -p:PublishSingleFile=false -p:PublishTrimmed=false --self-contained false -c Release

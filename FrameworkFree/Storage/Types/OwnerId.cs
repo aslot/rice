@@ -1,6 +1,7 @@
-namespace Data{
-public struct OwnerId
-        {
-            public int Id;
-        }
+namespace Own.Types
+{
+    public struct OwnerId
+    {
+        public int Id;
+    }
 }

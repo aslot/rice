@@ -1,6 +1,6 @@
-namespace Data.DataLockers
+namespace Own.DataLockers
 {
-    internal static class Lockers // использовать только в Storage - все lock переместить сюда
+    internal static class Lockers // использовать только в Storage
     {
         internal static readonly object RandomLocker = new object();
         internal static readonly object InitializationTransactionLocker = new object();
@@ -21,7 +21,7 @@ namespace Data.DataLockers
         internal static readonly object MessagesToPublishLocker = new object();
         internal static readonly object TopicsToStartLocker = new object();
         internal static readonly object CaptchaMessagesLocker = new object();
-        internal static readonly object CaptchaMessages_RegistrationDataLocker = new object();
+        internal static readonly object CaptchaMessagesRegistrationDataLocker = new object();
         internal static readonly object DialogPagesLocker = new object();
         internal static readonly object SectionPagesLocker = new object();
         internal static readonly object ThreadPagesLocker = new object();
@@ -32,7 +32,7 @@ namespace Data.DataLockers
         internal static readonly object ThreadPagesPageDepthLocker = new object();
         internal static readonly object SpecialLocker = new object();
         internal static readonly object CaptchaPageToReturnLocker = new object();
-        internal static readonly object PageToReturn_RegistrationDataLocker = new object();
+        internal static readonly object PageToReturnRegistrationDataLocker = new object();
         internal static readonly object MainPageLocker = new object();
         internal static readonly object MainContentLocker = new object();
         internal static readonly object tempLocker = new object();

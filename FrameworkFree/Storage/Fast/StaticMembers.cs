@@ -1,55 +1,55 @@
 using System.Collections.Generic;
 using System;
-namespace Data
+using Own.Types;
+namespace Own.Storage
 {
-    public sealed partial class Memory
+    internal static partial class Fast
     {
-        public static Random Random;
-        public static
-            Dictionary<Pair, int> LoginPasswordAccIdHashes;
-        public static
-            Dictionary<uint, byte> NicksHashes;
-        public static
-            Dictionary<Pair, Guid?> LoginPasswordHashes;
-        public static
-            Dictionary<Pair, byte> LoginPasswordHashesDelta;
-        public static
-            Dictionary<OwnerId, Dictionary<CompanionId, PrivateMessages>> PersonalPages;
+        internal static Random RandomStatic;
+        internal static
+            Dictionary<Pair, int> LoginPasswordAccIdHashesStatic;
+        internal static
+            Dictionary<uint, byte> NicksHashesStatic;
+        internal static
+            Dictionary<Pair, Guid?> LoginPasswordHashesStatic;
+        internal static
+            Dictionary<Pair, byte> LoginPasswordHashesDeltaStatic;
+        internal static
+            Dictionary<OwnerId, Dictionary<CompanionId, PrivateMessages>> PersonalPagesStatic;
         private static
-            Dictionary<OwnerId, Dictionary<CompanionId, int>> PersonalPagesDepths;
+            Dictionary<OwnerId, Dictionary<CompanionId, int>> PersonalPagesDepthsStatic;
 
-        private static Dictionary<int, RegBag> RegistrationLine;
-        private static Dictionary<int, PreRegBag> PreRegistrationLine;
-        public static Queue<DialogData> DialogsToStart;
-        public static Queue<MessageData> PersonalMessagesToPublish;
-        public static Queue<MessageData> MessagesToPublish;
-        public static Queue<TopicData> TopicsToStart;
-        public static Dictionary<uint, byte> RemoteIpHashesAttemptsCounter;
-        public static Queue<AccountIdentifierRemoteIp> AccountIdentifierRemoteIpLog;
-        public static Queue<uint> CaptchaMessages;
-        public static Queue<uint> CaptchaMessages_RegistrationData;
-        public static ICollection<uint> BlockedRemoteIpsHashes;
-        public static string[][] DialogPages;
-        public static string[][] SectionPages;
-        public static Queue<PreProfile> PreSaveProfilesLine;
-        public static Dictionary<int, string[]> ThreadPages;
-        public static Dictionary<int, string> PublicProfilePages;
-        public static Dictionary<int, string> OwnProfilePages;
-        public static string[] EndPointPages;
-        public static string[] pages;
-        public static int[] DialogPagesPageDepth;
-        public static int[] SectionPagesPageDepth;
-        public static Dictionary<int, int> ThreadPagesPageDepth;
-        public static string CaptchaPageToReturn;
-        public static string PageToReturn_RegistrationData;
-        public static string MainPage;
-        public static string MainContent;
-        public static string temp;
-        public static int threadsCount;
-        public static int pos;
-        public static int DialogPagesLength;
-        public static int SectionPagesLength;
-        public static int ThreadPagesLength;
-        public static byte TimerIsWorking;
+        private static Dictionary<int, RegBag> RegistrationLineStatic;
+        private static Dictionary<int, PreRegBag> PreRegistrationLineStatic;
+        internal static Queue<DialogData> DialogsToStartStatic;
+        internal static Queue<MessageData> PersonalMessagesToPublishStatic;
+        internal static Queue<MessageData> MessagesToPublishStatic;
+        internal static Queue<TopicData> TopicsToStartStatic;
+        internal static Dictionary<uint, byte> RemoteIpHashesAttemptsCounterStatic;
+        internal static Queue<AccountIdentifierRemoteIp> AccountIdentifierRemoteIpLogStatic;
+        internal static Queue<uint> CaptchaMessagesStatic;
+        internal static Queue<uint> CaptchaMessagesRegistrationDataStatic;
+        internal static ICollection<uint> BlockedRemoteIpsHashesStatic;
+        internal static string[][] DialogPagesStatic;
+        internal static string[][] SectionPagesStatic;
+        internal static Queue<PreProfile> PreSaveProfilesLineStatic;
+        internal static Dictionary<int, string[]> ThreadPagesStatic;
+        internal static Dictionary<int, string> PublicProfilePagesStatic;
+        internal static Dictionary<int, string> OwnProfilePagesStatic;
+        internal static string[] EndPointPagesStatic;
+        internal static string[] PagesStatic;
+        internal static int[] DialogPagesPageDepthStatic;
+        internal static int[] SectionPagesPageDepthStatic;
+        internal static Dictionary<int, int> ThreadPagesPageDepthStatic;
+        internal static string CaptchaPageToReturnStatic;
+        internal static string PageToReturnRegistrationDataStatic;
+        internal static string MainPageStatic;
+        internal static string MainContentStatic;
+        internal static string TempStatic;
+        internal static int ThreadsCountStatic;
+        internal static int PosStatic;
+        internal static int DialogPagesLengthStatic;
+        internal static int SectionPagesLengthStatic;
+        internal static byte TimerIsWorkingStatic;
     }
 }

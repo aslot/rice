@@ -1,7 +1,8 @@
-namespace Data{
+namespace Own.Types
+{
     public struct Pair
-        {
-            public uint LoginHash;
-            public uint PasswordHash; 
-        }
+    {
+        public uint LoginHash;
+        public uint PasswordHash;
+    }
 }

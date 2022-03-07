@@ -1,4 +1,4 @@
-namespace Data
+namespace Own.Types
 {
     public struct PreProfile
     {

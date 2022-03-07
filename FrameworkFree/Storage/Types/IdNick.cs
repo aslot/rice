@@ -1,7 +1,8 @@
-namespace Data{
-      public struct IdNick
+namespace Own.Types
 {
-public int Id;
-public string Nick;
-}
+    public struct IdNick
+    {
+        public int Id;
+        public string Nick;
+    }
 }

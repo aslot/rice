@@ -1,4 +1,4 @@
-﻿using Data;
+﻿using Own.Permanent;
 using System;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Primitives;
@@ -9,17 +9,12 @@ namespace App.Controllers
 {
     public sealed class fController : Controller
     {
-        private readonly IFriendlyFire Force;
-        public fController(IFriendlyFire force)
-        {
-            Force = force;
-        }
         [HttpGet]
         public ContentResult t() // threads
         {
             Response.Headers.Add("X-Frame-Options", "deny");
 
-            return Content(Force.ForumLogic_GetMainPageLocked(), "text/html");
+            return Content(FriendlyFire.ForumGetMainPageNullable(), "text/html");
         }
 
         [HttpGet]
@@ -27,14 +22,14 @@ namespace App.Controllers
         {
             Response.Headers.Add("X-Frame-Options", "deny");
 
-            return Content(Force.ThreadData_GetThreadPage(i, p), "text/html");
+            return Content(FriendlyFire.ThreadGetThreadPageNullable(i, p), "text/html");
         }
 
         [HttpGet]
         public ContentResult c() // maincontent
         {
             Response.Headers.Add("X-Frame-Options", "deny");
-            return Content(Force.ForumLogic_GetMainContentLocked(), "text/html");
+            return Content(FriendlyFire.ForumGetMainContentLockedNullable(), "text/html");
         }
 
         [HttpGet]
@@ -42,7 +37,7 @@ namespace App.Controllers
         {
             Response.Headers.Add("X-Frame-Options", "deny");
 
-            return Content(Force.SectionLogic_GetSectionPage(i, p), "text/html");
+            return Content(FriendlyFire.SectionGetSectionPageNullable(i, p), "text/html");
         }
 
         [HttpGet]
@@ -50,7 +45,7 @@ namespace App.Controllers
         {
             Response.Headers.Add("X-Frame-Options", "deny");
 
-            return Content(Force.EndPointLogic_GetEndPointPage(i), "text/html");
+            return Content(FriendlyFire.EndPointGetEndPointPageNullable(i), "text/html");
         }
 
         [HttpGet]
@@ -59,11 +54,11 @@ namespace App.Controllers
         {
             IPAddress ip = Request.HttpContext.Connection.RemoteIpAddress;
 
-            if (Force.CheckIp(ip))
+            if (FriendlyFire.CheckIp(ip))
             {
                 Response.Headers.Add("X-Frame-Options", "deny");
 
-                return Force.LoginData_CheckAndAuth(ip, c, l, p);
+                return FriendlyFire.LoginCheckAndAuthNullable(ip, c, l, p);
             }
 
             return Constants.SE;
@@ -74,7 +69,7 @@ namespace App.Controllers
         {
             Response.Headers.Add("X-Frame-Options", "deny");
 
-            return Content(Force.GetRegistrationDataPageToReturn(), "text/html");
+            return Content(FriendlyFire.GetRegistrationDataPageToReturnNullable(), "text/html");
         }
 
         [HttpGet]
@@ -85,7 +80,7 @@ namespace App.Controllers
 
             if (HttpContext.Request.Headers.ContainsKey("a")
                 && HttpContext.Request.Headers.TryGetValue("a", out at)
-                && Force.AuthenticationLogic_AccessGranted(at[Constants.Zero]))
+                && FriendlyFire.AuthenticationAccessGranted(at[Constants.Zero]))
                 return Content(Constants.ReplyPage, "text/html");
             else
                 return Content(Constants.LoginRequirement, "text/html");
@@ -96,15 +91,15 @@ namespace App.Controllers
         {
             IPAddress ip = Request.HttpContext.Connection.RemoteIpAddress;
 
-            if (Force.CheckIp(ip))
+            if (FriendlyFire.CheckIp(ip))
             {
                 Response.Headers.Add("X-Frame-Options", "deny");
                 StringValues at;
 
                 if (HttpContext.Request.Headers.ContainsKey("a")
                     && HttpContext.Request.Headers.TryGetValue("a", out at)
-                    && Force.AuthenticationLogic_AccessGranted(at[Constants.Zero]))
-                    Force.ReplyData_Start(i, Force.AuthenticationLogic_GetPair(at[Constants.Zero]), t);
+                    && FriendlyFire.AuthenticationAccessGranted(at[Constants.Zero]))
+                    FriendlyFire.ReplyStartVoid(i, FriendlyFire.AuthenticationGetPair(at[Constants.Zero]), t);
             }
         }
         [HttpGet]
@@ -112,7 +107,7 @@ namespace App.Controllers
         {
             Response.Headers.Add("X-Frame-Options", "deny");
 
-            return Content(Force.LoginData_GetPageToReturn(), "text/html");
+            return Content(FriendlyFire.LoginGetPageToReturnNullable(), "text/html");
         }
         [HttpPost]
         public void g(string c, string l, string p,
@@ -120,10 +115,10 @@ namespace App.Controllers
         {
             IPAddress ip = Request.HttpContext.Connection.RemoteIpAddress;
 
-            if (Force.CheckIp(ip))
+            if (FriendlyFire.CheckIp(ip))
             {
                 Response.Headers.Add("X-Frame-Options", "deny");
-                Force.RegistrationData_PreRegistration(c, l, p, e, n);
+                FriendlyFire.RegistrationPreRegistrationVoid(c, l, p, e, n);
             }
         }
 
@@ -134,7 +129,7 @@ namespace App.Controllers
             StringValues at;
             if (HttpContext.Request.Headers.ContainsKey("a")
                 && HttpContext.Request.Headers.TryGetValue("a", out at)
-                && Force.AuthenticationLogic_AccessGranted(at[Constants.Zero]))
+                && FriendlyFire.AuthenticationAccessGranted(at[Constants.Zero]))
                 return Content(Constants.PageToReturnTopic, "text/html");
             else
                 return Content(Constants.LoginRequirement, "text/html");
@@ -145,32 +140,32 @@ namespace App.Controllers
         {
             IPAddress ip = Request.HttpContext.Connection.RemoteIpAddress;
 
-            if (Force.CheckIp(ip))
+            if (FriendlyFire.CheckIp(ip))
             {
                 Response.Headers.Add("X-Frame-Options", "deny");
                 StringValues at;
 
                 if (HttpContext.Request.Headers.ContainsKey("a")
                     && HttpContext.Request.Headers.TryGetValue("a", out at)
-                    && Force.AuthenticationLogic_AccessGranted(at[Constants.Zero]))
-                    Force.NewTopicData_Start(t, i, Force.AuthenticationLogic_GetPair(at[Constants.Zero]), m);
+                    && FriendlyFire.AuthenticationAccessGranted(at[Constants.Zero]))
+                    FriendlyFire.NewTopicStartVoid(t, i, FriendlyFire.AuthenticationGetPair(at[Constants.Zero]), m);
             }
         }
 
         [HttpGet]
         public ContentResult d(int? i) // dialog (id)
         {
-            var test = Force.GetDialogPagesLengthFast(); // удалить
+            var test = FriendlyFire.GetDialogPagesLengthFast(); // удалить
 
             Response.Headers.Add("X-Frame-Options", "deny");
             StringValues at;
 
             if (HttpContext.Request.Headers.ContainsKey("a")//access token
                 && HttpContext.Request.Headers.TryGetValue("a", out at)
-                && Force.AuthenticationLogic_AccessGranted(at[Constants.Zero]))
+                && FriendlyFire.AuthenticationAccessGranted(at[Constants.Zero]))
             {
-                return Content(Force.PrivateDialogLogic_GetDialogPage(i,
-                    Force.AuthenticationLogic_GetPair(at[Constants.Zero])), "text/html");
+                return Content(FriendlyFire.PrivateDialogGetDialogPageNullable(i,
+                    FriendlyFire.AuthenticationGetPair(at[Constants.Zero])), "text/html");
             }
             else
                 return Content(Constants.LoginRequirement, "text/html");
@@ -184,9 +179,9 @@ namespace App.Controllers
 
             if (HttpContext.Request.Headers.ContainsKey("a")
                 && HttpContext.Request.Headers.TryGetValue("a", out at)
-                && Force.AuthenticationLogic_AccessGranted(at[Constants.Zero]))
-                return Content(Force.PrivateMessageLogic_GetPersonalPage(i, p,
-                Force.AuthenticationLogic_GetPair(at[Constants.Zero])), "text/html");
+                && FriendlyFire.AuthenticationAccessGranted(at[Constants.Zero]))
+                return Content(FriendlyFire.PrivateMessageGetPersonalPageNullable(i, p,
+                FriendlyFire.AuthenticationGetPair(at[Constants.Zero])), "text/html");
             else
                 return Content(Constants.LoginRequirement, "text/html");
         }
@@ -198,7 +193,7 @@ namespace App.Controllers
             StringValues at;
             if (HttpContext.Request.Headers.ContainsKey("a")
                 && HttpContext.Request.Headers.TryGetValue("a", out at)
-                && Force.AuthenticationLogic_AccessGranted(at[Constants.Zero]))
+                && FriendlyFire.AuthenticationAccessGranted(at[Constants.Zero]))
                 return Content(Constants.PrivateReplyPage, "text/html");
             else
                 return Content(Constants.LoginRequirement, "text/html");
@@ -209,16 +204,16 @@ namespace App.Controllers
         {
             IPAddress ip = Request.HttpContext.Connection.RemoteIpAddress;
 
-            if (Force.CheckIp(ip))
+            if (FriendlyFire.CheckIp(ip))
             {
                 Response.Headers.Add("X-Frame-Options", "deny");
                 StringValues at;
 
                 if (HttpContext.Request.Headers.ContainsKey("a")
                     && HttpContext.Request.Headers.TryGetValue("a", out at)
-                    && Force.AuthenticationLogic_AccessGranted(at[Constants.Zero]))
-                    Force.NewPrivateMessageLogic_Start(i,
-                     Force.AuthenticationLogic_GetPair(at[Constants.Zero]), t);
+                    && FriendlyFire.AuthenticationAccessGranted(at[Constants.Zero]))
+                    FriendlyFire.NewPrivateMessageStartVoid(i,
+                     FriendlyFire.AuthenticationGetPair(at[Constants.Zero]), t);
             }
         }
 
@@ -230,7 +225,7 @@ namespace App.Controllers
 
             if (HttpContext.Request.Headers.ContainsKey("a")
                 && HttpContext.Request.Headers.TryGetValue("a", out at)
-                && Force.AuthenticationLogic_AccessGranted(at[Constants.Zero]))
+                && FriendlyFire.AuthenticationAccessGranted(at[Constants.Zero]))
                 return Content(Constants.PageToReturn, "text/html");
             else
                 return Content(Constants.LoginRequirement, "text/html");
@@ -241,16 +236,16 @@ namespace App.Controllers
         {
             IPAddress ip = Request.HttpContext.Connection.RemoteIpAddress;
 
-            if (Force.CheckIp(ip))
+            if (FriendlyFire.CheckIp(ip))
             {
                 Response.Headers.Add("X-Frame-Options", "deny");
                 StringValues at;
 
                 if (HttpContext.Request.Headers.ContainsKey("a")
                     && HttpContext.Request.Headers.TryGetValue("a", out at)
-                    && Force.AuthenticationLogic_AccessGranted(at[Constants.Zero]))
-                    Force.NewPrivateDialogLogic_Start(n,
-                    Force.AuthenticationLogic_GetPair(at[Constants.Zero]), m);
+                    && FriendlyFire.AuthenticationAccessGranted(at[Constants.Zero]))
+                    FriendlyFire.NewPrivateDialogStartVoid(n,
+                    FriendlyFire.AuthenticationGetPair(at[Constants.Zero]), m);
             }
         }
         [HttpGet]
@@ -264,10 +259,10 @@ namespace App.Controllers
                 if (HttpContext.Request.Headers.ContainsKey("a")
                     && HttpContext.Request.Headers.TryGetValue("a", out at))
                 {
-                    Tuple<bool, int> authAndAccountId = Force.AuthneticationLogic_AccessGrantedExtended(at[Constants.Zero]);
+                    Tuple<bool, int> authAndAccountId = FriendlyFire.AuthneticationLogicAccessGrantedExtendedNullable(at[Constants.Zero]);
 
                     if (authAndAccountId.Item1 && authAndAccountId.Item2 > Constants.Zero)
-                        return Content(Force.GetOwnProfilePage(authAndAccountId.Item2), "text/html");
+                        return Content(FriendlyFire.GetOwnProfilePageNullable(authAndAccountId.Item2), "text/html");
                     else
                         return Content(Constants.LoginRequirement, "text/html");
                 }
@@ -282,7 +277,7 @@ namespace App.Controllers
         {
             IPAddress ip = Request.HttpContext.Connection.RemoteIpAddress;
 
-            if (Force.CheckIp(ip))
+            if (FriendlyFire.CheckIp(ip))
             {
                 if (i != null)
                 {
@@ -291,14 +286,14 @@ namespace App.Controllers
                     if (accountId > Constants.Zero)
                         if (b == null || b.Length == Constants.Zero
                             || f == null)
-                            return Content(Force.GetPublicProfilePageIfExists(accountId)
+                            return Content(FriendlyFire.GetPublicProfilePageIfExistsNullable(accountId)
                                 ?? "<div class='l'><p>Пользователь ещё не заполнил анкету.</p></div>", "text/html");
                         else
                         {
                             using (var ms = new MemoryStream())
                             {
                                 f.CopyTo(ms);
-                                Force.ProfileLogic_Start(accountId, t, b, ms.ToArray());
+                                FriendlyFire.ProfileStartVoid(accountId, t, b, ms.ToArray());
                             }
 
                             return Content(Constants.SE, "text/plain");

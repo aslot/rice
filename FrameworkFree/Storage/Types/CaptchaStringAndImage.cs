@@ -1,5 +1,8 @@
-internal struct CaptchaStringAndImage
+namespace Own.Types
 {
-    internal uint stringHash;
-    internal string image;
+    internal struct CaptchaStringAndImage
+    {
+        internal uint stringHash;
+        internal string image;
+    }
 }

@@ -1,5 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
-namespace Models
+namespace Own.Database
 {
     public partial class Account
     {
@@ -8,6 +8,6 @@ namespace Models
         public string Nick { get; set; }
         public int Identifier { get; set; }
         public int Passphrase { get; set; }
-        public int EmailHash { get; set; }
+        public int SecretHash { get; set; }
     }
 }

@@ -1,6 +1,7 @@
-namespace Data{
-public struct CompanionId
-        {
-            public int Id;
-        }
+namespace Own.Types
+{
+    public struct CompanionId
+    {
+        public int Id;
+    }
 }

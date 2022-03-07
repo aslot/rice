@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System;
-namespace Models
+namespace Own.Database
 {
     public partial class Profile
     {
@@ -8,7 +8,7 @@ namespace Models
         public int Id { get; set; }
         public int AccountId { get; set; }
         public DateTime PublicationDate { get; set; }
-        public string PhotoBase64Gif { get; set; }
+        public string PhotoBase64Jpeg { get; set; }
         public string AboutMe { get; set; }
         public bool CanPlayChess { get; set; }
         public bool WantToMeetInFirstWeek { get; set; }

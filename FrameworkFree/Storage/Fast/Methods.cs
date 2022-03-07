@@ -1,155 +1,157 @@
 using System.Collections.Generic;
 using System;
-using XXHash;
+using Inclusions;
 using System.Net;
 using System.Linq;
-using static Data.DataLockers.Lockers;
-namespace Data
-{ // Перекрёстные ссылки между методами исключены.
-    public sealed partial class Memory
+using Own.Permanent;
+using Own.Types;
+using static Own.DataLockers.Lockers;
+namespace Own.Storage
+{
+    internal static partial class Fast
     {
-        public bool LoginPasswordAccIdHashesContainsKey(in Pair pair)
+        internal static bool LoginPasswordAccIdHashesContainsKeyLocked(in Pair pair)
         {
             lock (LoginPasswordAccIdHashesLocker)
-                return LoginPasswordAccIdHashes.ContainsKey(pair);
+                return LoginPasswordAccIdHashesStatic.ContainsKey(pair);
         }
-        public void LoginPasswordAccIdHashesAdd(in Pair pair, in int accountId)
+        internal static void LoginPasswordAccIdHashesAddLocked(in Pair pair, in int accountId)
         {
             lock (LoginPasswordAccIdHashesLocker)
-                LoginPasswordAccIdHashes.Add(pair, accountId);
+                LoginPasswordAccIdHashesStatic.Add(pair, accountId);
         }
-        public void LoginPasswordHashesDeltaRemove(in Pair pair, out byte result)
+        internal static void LoginPasswordHashesDeltaRemoveLocked(in Pair pair, out byte result)
         {
             lock (LoginPasswordHashesDeltaLocker)
-                LoginPasswordHashesDelta.Remove(pair, out result);
+                LoginPasswordHashesDeltaStatic.Remove(pair, out result);
         }
-        public IEnumerable<int> IterateThroughAccountIds()
+        internal static IEnumerable<int> IterateThroughAccountIdsLocked()
         {
             lock (LoginPasswordAccIdHashesLocker)
-                foreach (int accountId in LoginPasswordAccIdHashes.Values)
+                foreach (int accountId in LoginPasswordAccIdHashesStatic.Values)
                     yield return accountId;
         }
-        public void LoginPasswordHashesDeltaAdd(in Pair pair, in byte val)
+        internal static void LoginPasswordHashesDeltaAddLocked(in Pair pair, in byte val)
         {
             lock (LoginPasswordHashesDeltaLocker)
-                LoginPasswordHashesDelta.Add(pair, Constants.Zero);
+                LoginPasswordHashesDeltaStatic.Add(pair, Constants.Zero);
         }
-        public bool LoginPasswordHashesDeltaContainsKey(in Pair pair)
+        internal static bool LoginPasswordHashesDeltaContainsKeyLocked(in Pair pair)
         {
             lock (LoginPasswordHashesDeltaLocker)
-                return LoginPasswordHashesDelta.ContainsKey(pair);
+                return LoginPasswordHashesDeltaStatic.ContainsKey(pair);
         }
-        public int GetLoginPasswordAccIdHashes(in Pair pair)
+        internal static int? GetLoginPasswordAccIdHashesLocked(in Pair pair)
         {
             lock (LoginPasswordAccIdHashesLocker)
-                return LoginPasswordAccIdHashes[pair];
+                return LoginPasswordAccIdHashesStatic.ContainsKey(pair) ? LoginPasswordAccIdHashesStatic[pair] : null;
         }
-        public void InitializeLoginPasswordAccIdHashes()
+        internal static void InitializeLoginPasswordAccIdHashesLocked()
         {
             lock (LoginPasswordAccIdHashesLocker)
-                Memory.LoginPasswordAccIdHashes = new Dictionary<Pair, int>();
+                Fast.LoginPasswordAccIdHashesStatic = new Dictionary<Pair, int>();
         }
-        public void InitializeLoginPasswordHashes()
+        internal static void InitializeLoginPasswordHashesLocked()
         {
             lock (LoginPasswordHashesLocker)
-                Memory.LoginPasswordHashes = new Dictionary<Pair, Guid?>();
+                Fast.LoginPasswordHashesStatic = new Dictionary<Pair, Guid?>();
         }
-        public IEnumerable<Pair> GetLoginPasswordHashesDeltaKeys()
+        internal static IEnumerable<Pair> GetLoginPasswordHashesDeltaKeysLocked()
         {
             lock (LoginPasswordHashesDeltaLocker)
-                return LoginPasswordHashesDelta.Keys;
+                return LoginPasswordHashesDeltaStatic.Keys;
         }
-        public void InitializeLoginPasswordHashesDelta()
+        internal static void InitializeLoginPasswordHashesDeltaLocked()
         {
             lock (LoginPasswordHashesDeltaLocker)
-                Memory.LoginPasswordHashesDelta = new Dictionary<Pair, byte>();
+                Fast.LoginPasswordHashesDeltaStatic = new Dictionary<Pair, byte>();
         }
-        public void InitializePrivateMessages()
+        internal static void InitializePrivateMessagesLocked()
         {
             lock (PersonalPagesLocker)
             {
-                Memory.PersonalPages = new
+                Fast.PersonalPagesStatic = new
                     Dictionary
                         <OwnerId, Dictionary<CompanionId, PrivateMessages>>();
 
                 lock (PersonalPagesDepthsLocker)
-                    Memory.PersonalPagesDepths = new
+                    Fast.PersonalPagesDepthsStatic = new
                     Dictionary<OwnerId, Dictionary<CompanionId, int>>();
             }
         }
-        public bool LoginPasswordHashesContainsKey(in Pair pair)
+        internal static bool LoginPasswordHashesContainsKeyLocked(in Pair pair)
         {
             lock (LoginPasswordHashesLocker)
-                return LoginPasswordHashes.ContainsKey(pair);
+                return LoginPasswordHashesStatic.ContainsKey(pair);
         }
-        public void LoginPasswordHashesAdd(in Pair pair, in Guid? guid)
-        => LoginPasswordHashes.Add(pair, null);
-        public bool NicksHashesKeysContains(in uint hash)
+        internal static void LoginPasswordHashesAdd(in Pair pair, in Guid? guid)
+        => LoginPasswordHashesStatic.Add(pair, null);
+        internal static bool NicksHashesKeysContainsLocked(in uint hash)
         {
             lock (NicksHashesLocker)
-                return NicksHashes.ContainsKey(hash);
+                return NicksHashesStatic.ContainsKey(hash);
         }
-        public void InitializeNicksHashes()
+        internal static void InitializeNicksHashesLocked()
         {
             lock (NicksHashesLocker)
-                NicksHashes = new Dictionary<uint, byte>();
+                NicksHashesStatic = new Dictionary<uint, byte>();
         }
-        private bool CheckIfIpIsNotBanned(in uint ipHash)
+        private static bool CheckIfIpIsNotBannedLocked(in uint ipHash)
         {
             lock (BlockedRemoteIpsHashesLocker)
-                return !BlockedRemoteIpsHashes.Contains(ipHash);
+                return !BlockedRemoteIpsHashesStatic.Contains(ipHash);
         }
-        public void InitializeAccountIdentifierRemoteIpLog()
+        internal static void InitializeAccountIdentifierRemoteIpLogLocked()
         {
             lock (AccountIdentifierRemoteIpLogLocker)
-                AccountIdentifierRemoteIpLog = new Queue<AccountIdentifierRemoteIp>();
+                AccountIdentifierRemoteIpLogStatic = new Queue<AccountIdentifierRemoteIp>();
         }
-        public void AccountIdentifierRemoteIpLogEnqueue(in AccountIdentifierRemoteIp value)
+        internal static void AccountIdentifierRemoteIpLogEnqueueLocked(in AccountIdentifierRemoteIp value)
         {
             lock (AccountIdentifierRemoteIpLogLocker)
-                AccountIdentifierRemoteIpLog.Enqueue(value);
+                AccountIdentifierRemoteIpLogStatic.Enqueue(value);
         }
-        public Queue<AccountIdentifierRemoteIp> GetAccountIdentifierRemoteIps()
+        internal static Queue<AccountIdentifierRemoteIp> GetAccountIdentifierRemoteIpsLocked()
         {
             lock (AccountIdentifierRemoteIpLogLocker)
-                return AccountIdentifierRemoteIpLog;
+                return AccountIdentifierRemoteIpLogStatic;
         }
-        public void ClearAccountIdentifierRemoteIps()
+        internal static void ClearAccountIdentifierRemoteIpsLocked()
         {
             lock (AccountIdentifierRemoteIpLogLocker)
-                AccountIdentifierRemoteIpLog.Clear();
+                AccountIdentifierRemoteIpLogStatic.Clear();
         }
-        public void NicksHashesAdd(in uint nickHash, in byte temp)
+        internal static void NicksHashesAddLocked(in uint nickHash, in byte temp)
         {
             lock (NicksHashesLocker)
-                NicksHashes.Add(nickHash, temp);
+                NicksHashesStatic.Add(nickHash, temp);
         }
-        public string GetEndPointPageLocked(in int index)
+        internal static string GetEndPointPageLocked(in int index)
         {
             lock (EndPointPagesLocker)
-                return EndPointPages[index];
+                return EndPointPagesStatic[index];
         }
-        public void SetEndPointPageLocked(in int index, in string value)
+        internal static void SetEndPointPageLocked(in int index, in string value)
         {
             lock (EndPointPagesLocker)
-                EndPointPages[index] = value;
+                EndPointPagesStatic[index] = value;
         }
-        public void InitializeEndPointPagesLocked(in int size)
+        internal static void InitializeEndPointPagesLocked(in int size)
         {
             lock (EndPointPagesLocker)
-                EndPointPages = new string[size];
+                EndPointPagesStatic = new string[size];
         }
-        public string GetMainContentLocked()
+        internal static string GetMainContentLocked()
         {
             lock (MainContentLocker)
-                return MainContent;
+                return MainContentStatic;
         }
-        public void SetMainContentLocked(in string value)
+        internal static void SetMainContentLocked(in string value)
         {
             lock (MainContentLocker)
-                MainContent = value;
+                MainContentStatic = value;
         }
-        public bool CheckIp(in IPAddress ip, in byte value)
+        internal static bool CheckIp(in IPAddress ip, in byte value)
         {
             uint hash;
 
@@ -158,106 +160,106 @@ namespace Data
             else
                 hash = XXHash32.Hash(ip.ToString());
 
-            return CheckIfIpIsNotBanned(hash) && IncrementWithValueRemoteIpHashesAttemptsCountersAndGrantAccessAndAddIfNotPresented(hash, value);
+            return CheckIfIpIsNotBannedLocked(hash) && IncrementWithValueRemoteIpHashesAttemptsCountersAndGrantAccessAndAddIfNotPresentedLocked(hash, value);
         }
-        public string GetMainPageLocked()
+        internal static string GetMainPageLocked()
         {
             lock (MainPageLocker)
-                return MainPage;
+                return MainPageStatic;
         }
-        public void SetMainPageLocked(in string value)
+        internal static void SetMainPageLocked(in string value)
         {
             lock (MainPageLocker)
-                MainPage = value;
+                MainPageStatic = value;
         }
-        public void AddToMainPageLocked(in string value)
+        internal static void AddToMainPageLocked(in string value)
         {
             lock (MainPageLocker)
-                MainPage += value;
+                MainPageStatic += value;
         }
-        public void DialogsToStartEnqueue(in DialogData value)
+        internal static void DialogsToStartEnqueueLocked(in DialogData value)
         {
             lock (DialogsToStartLocker)
-                DialogsToStart.Enqueue(value);
+                DialogsToStartStatic.Enqueue(value);
         }
-        public void InitializeDialogsToStart()
+        internal static void InitializeDialogsToStartLocked()
         {
             lock (DialogsToStartLocker)
-                DialogsToStart = new Queue<DialogData>();
+                DialogsToStartStatic = new Queue<DialogData>();
         }
-        public DialogData DialogsToStartDequeue()
+        internal static DialogData DialogsToStartDequeueLocked()
         {
             lock (DialogsToStartLocker)
-                return DialogsToStart.Dequeue();
+                return DialogsToStartStatic.Dequeue();
         }
-        public void InitializePersonalMessagesToPublish()
+        internal static void InitializePersonalMessagesToPublishLocked()
         {
             lock (PersonalMessagesToPublishLocker)
-                PersonalMessagesToPublish = new Queue<MessageData>();
+                PersonalMessagesToPublishStatic = new Queue<MessageData>();
         }
-        public bool CheckIfTimerIsWorking()
+        internal static bool CheckIfTimerIsWorkingLocked()
         {
             lock (TimerIsWorkingLocker)
-                return TimerIsWorking == Constants.One;
+                return TimerIsWorkingStatic == Constants.One;
         }
-        public void ResetTimerIsWorkingFlag()
+        internal static void ResetTimerIsWorkingFlagLocked()
         {
             lock (TimerIsWorkingLocker)
-                TimerIsWorking = Constants.Zero;
+                TimerIsWorkingStatic = Constants.Zero;
         }
-        public void SetTimerIsWorkingFlag()
+        internal static void SetTimerIsWorkingFlagLocked()
         {
             lock (TimerIsWorkingLocker)
-                TimerIsWorking = Constants.One;
+                TimerIsWorkingStatic = Constants.One;
         }
-        public void PersonalMessagesToPublishEnqueue(in MessageData value)
+        internal static void PersonalMessagesToPublishEnqueueLocked(in MessageData value)
         {
             lock (PersonalMessagesToPublishLocker)
-                PersonalMessagesToPublish.Enqueue(value);
+                PersonalMessagesToPublishStatic.Enqueue(value);
         }
-        public MessageData PersonalMessagesToPublishDequeue()
+        internal static MessageData PersonalMessagesToPublishDequeueLocked()
         {
             lock (PersonalMessagesToPublishLocker)
-                return PersonalMessagesToPublish.Dequeue();
+                return PersonalMessagesToPublishStatic.Dequeue();
         }
-        public string[] GetDialogPagesArrayLocked(in int index)
+        internal static string[] GetDialogPagesArrayLockedLocked(in int index)
         {
             lock (DialogPagesLocker)
-                return DialogPages[index];
+                return DialogPagesStatic[index];
         }
-        public void SetDialogPagesArrayLocked(in int index, in string[] value)
+        internal static void SetDialogPagesArrayLocked(in int index, in string[] value)
         {
             lock (DialogPagesLocker)
-                DialogPages[index] = value;
+                DialogPagesStatic[index] = value;
         }
-        public string GetDialogPagesPageLocked(in int arrayIndex, in int pageIndex)
+        internal static string GetDialogPagesPageLocked(in int arrayIndex, in int pageIndex)
         {
             lock (DialogPagesLocker)
-                return DialogPages[arrayIndex][pageIndex];
+                return DialogPagesStatic[arrayIndex][pageIndex];
         }
-        public void SetDialogPagesPageLocked
+        internal static void SetDialogPagesPageLocked
             (in int arrayIndex, in int pageIndex, in string value)
         {
             lock (DialogPagesLocker)
-                DialogPages[arrayIndex][pageIndex] = value;
+                DialogPagesStatic[arrayIndex][pageIndex] = value;
         }
-        public void AddToDialogPagesPageLocked
+        internal static void AddToDialogPagesPageLocked
             (in int arrayIndex, in int pageIndex, in string value)
         {
             lock (DialogPagesLocker)
-                DialogPages[arrayIndex][pageIndex] += value;
+                DialogPagesStatic[arrayIndex][pageIndex] += value;
         }
-        public void InitializeDialogPagesLocked(in string[][] value)
+        internal static void InitializeDialogPagesLocked(in string[][] value)
         {
             lock (DialogPagesLocker)
-                DialogPages = value;
+                DialogPagesStatic = value;
         }
-        public int GetDialogPagesLengthLocked()
+        internal static int GetDialogPagesLengthLocked()
         {
             lock (DialogPagesLengthLocker)
-                return DialogPagesLength;
+                return DialogPagesLengthStatic;
         }
-        public void CopyDialogPagesArraysToIncreasedSizeArraysAndFillGapsLocked()
+        internal static void CopyDialogPagesArraysToIncreasedSizeArraysAndFillGapsLocked()
         {
             lock (DialogPagesLocker)
             {
@@ -265,325 +267,325 @@ namespace Data
                 {
                     lock (DialogPagesLengthLocker)
                     {
-                        int len = DialogPagesLength;
-                        DialogPagesLength++;
-                        string[][] temp = new string[DialogPagesLength][];
-                        Array.Copy(DialogPages, temp, len);
-                        DialogPages = temp;
-                        DialogPages[len] = new string[Constants.One] { Constants.NewDialog };
-                        int[] temp1 = new int[DialogPagesLength];
-                        Array.Copy(DialogPagesPageDepth, temp1, len);
-                        DialogPagesPageDepth = temp1;
-                        DialogPagesPageDepth[len] = Constants.One;
+                        int len = DialogPagesLengthStatic;
+                        DialogPagesLengthStatic++;
+                        string[][] temp = new string[DialogPagesLengthStatic][];
+                        Array.Copy(DialogPagesStatic, temp, len);
+                        DialogPagesStatic = temp;
+                        DialogPagesStatic[len] = new string[Constants.One] { Constants.NewDialog };
+                        int[] temp1 = new int[DialogPagesLengthStatic];
+                        Array.Copy(DialogPagesPageDepthStatic, temp1, len);
+                        DialogPagesPageDepthStatic = temp1;
+                        DialogPagesPageDepthStatic[len] = Constants.One;
                     }
                 }
             }
         }
-        public void SetDialogPagesLengthLocked(in int value)
+        internal static void SetDialogPagesLengthLocked(in int value)
         {
             lock (DialogPagesLengthLocker)
-                DialogPagesLength = value;
+                DialogPagesLengthStatic = value;
         }
-        public void SetDialogPagesPageDepthLocked(in int index, in int value)
+        internal static void SetDialogPagesPageDepthLocked(in int index, in int value)
         {
             lock (DialogPagesPageDepthLocker)
-                DialogPagesPageDepth[index] = value;
+                DialogPagesPageDepthStatic[index] = value;
         }
-        public int GetDialogPagesPageDepthLocked(in int index)
+        internal static int GetDialogPagesPageDepthLocked(in int index)
         {
             lock (DialogPagesPageDepthLocker)
-                return DialogPagesPageDepth[index];
+                return DialogPagesPageDepthStatic[index];
         }
-        public void InitializeDialogPagesPageDepthLocked(in int[] value)
+        internal static void InitializeDialogPagesPageDepthLocked(in int[] value)
         {
             lock (DialogPagesPageDepthLocker)
-                DialogPagesPageDepth = value;
+                DialogPagesPageDepthStatic = value;
         }
-        public string GetMessage(in int ownerId, in int companionId, in int messageId)
+        internal static string GetMessageLocked(in int ownerId, in int companionId, in int messageId)
         {
             lock (PersonalPagesLocker)
-                return PersonalPages
+                return PersonalPagesStatic
                               [new OwnerId { Id = ownerId }]
                              [new CompanionId { Id = companionId }]
                              .Messages[messageId];
         }
-        public string[] GetMessages(in int ownerId, in int companionId)
+        internal static string[] GetMessagesLocked(in int ownerId, in int companionId)
         {
             lock (PersonalPagesLocker)
-                return PersonalPages
+                return PersonalPagesStatic
                     [new OwnerId { Id = ownerId }]
                     [new CompanionId { Id = companionId }]
                     .Messages;
         }
-        public void AddToPersonalPagesDepth(in int id, in int accountId)
+        internal static void AddToPersonalPagesDepthLocked(in int id, in int accountId)
         {
             lock (PersonalPagesDepthsLocker)
-                PersonalPagesDepths
+                PersonalPagesDepthsStatic
                  [new OwnerId { Id = accountId }]
                  [new CompanionId { Id = id }]
                  ++;
         }
-        public int GetPersonalPagesDepth(in int id, in int accountId)
+        internal static int GetPersonalPagesDepthLocked(in int id, in int accountId)
         {
             lock (PersonalPagesDepthsLocker)
-                return PersonalPagesDepths
+                return PersonalPagesDepthsStatic
                     [new OwnerId { Id = accountId }]
                     [new CompanionId { Id = id }];
         }
-        public void SetPersonalPagesPage
+        internal static void SetPersonalPagesPageLocked
                 (in int id, in int accountId, in int depth, in string page)
         {
             lock (PersonalPagesLocker)
-                PersonalPages
+                PersonalPagesStatic
                             [new OwnerId { Id = accountId }]
                             [new CompanionId { Id = id }]
                             .Messages[depth] = page;
         }
-        public void SetPersonalPagesMessagesArray
+        internal static void SetPersonalPagesMessagesArrayLocked
                     (in int id, in int accountId, in string[] value)
         {
             lock (PersonalPagesLocker)
-                PersonalPages
+                PersonalPagesStatic
                             [new OwnerId { Id = accountId }]
                             [new CompanionId { Id = id }]
                             = new PrivateMessages { Messages = value };
         }
-        public bool PersonalPagesContainsKey(in OwnerId ownerId, in CompanionId companionId, in bool flag)
+        internal static bool PersonalPagesContainsKeyLocked(in OwnerId ownerId, in CompanionId companionId, in bool flag)
         {
             lock (PersonalPagesLocker)
-                return flag && PersonalPages[ownerId].ContainsKey(companionId);
+                return flag && PersonalPagesStatic[ownerId].ContainsKey(companionId);
         }
-        public void PersonalPagesAdd(in OwnerId ownerId, in CompanionId companionId, in string[] newMsg, in bool flag)
+        internal static void PersonalPagesAddLocked(in OwnerId ownerId, in CompanionId companionId, in string[] newMsg, in bool flag)
         {
             lock (PersonalPagesLocker)
             {
                 if (!flag)
-                    PersonalPages.Add(ownerId, new Dictionary<CompanionId, PrivateMessages>());
-                PersonalPages[ownerId].Add(companionId,
+                    PersonalPagesStatic.Add(ownerId, new Dictionary<CompanionId, PrivateMessages>());
+                PersonalPagesStatic[ownerId].Add(companionId,
                         new PrivateMessages { Messages = newMsg });
             }
         }
-        public bool PersonalPagesKeysContains(in OwnerId ownerId)
+        internal static bool PersonalPagesKeysContainsLocked(in OwnerId ownerId)
         {
             lock (PersonalPagesLocker)
-                return PersonalPages.ContainsKey(ownerId);
+                return PersonalPagesStatic.ContainsKey(ownerId);
         }
-        public bool PersonalPagesDepthsContainsKey(in OwnerId ownerId, in CompanionId companionId, in bool flag)
+        internal static bool PersonalPagesDepthsContainsKeyLocked(in OwnerId ownerId, in CompanionId companionId, in bool flag)
         {
             lock (PersonalPagesDepthsLocker)
-                return flag && PersonalPagesDepths[ownerId].ContainsKey(companionId);
+                return flag && PersonalPagesDepthsStatic[ownerId].ContainsKey(companionId);
         }
-        public void PersonalPagesDepthsAdd(in OwnerId ownerId, in CompanionId companionId, in bool flag)
+        internal static void PersonalPagesDepthsAddLocked(in OwnerId ownerId, in CompanionId companionId, in bool flag)
         {
             lock (PersonalPagesDepthsLocker)
             {
                 if (!flag)
-                    PersonalPagesDepths.Add(ownerId, new Dictionary<CompanionId, int>());
-                PersonalPagesDepths[ownerId].Add(companionId, Constants.One);
+                    PersonalPagesDepthsStatic.Add(ownerId, new Dictionary<CompanionId, int>());
+                PersonalPagesDepthsStatic[ownerId].Add(companionId, Constants.One);
             }
         }
-        public bool PersonalPagesDepthsKeysContains(in OwnerId ownerId)
+        internal static bool PersonalPagesDepthsKeysContainsLocked(in OwnerId ownerId)
         {
             lock (PersonalPagesDepthsLocker)
-                return PersonalPagesDepths.ContainsKey(ownerId);
+                return PersonalPagesDepthsStatic.ContainsKey(ownerId);
         }
-        public int GetPersonalPagesPageDepth(in int accountId, in int companionId)
+        internal static int GetPersonalPagesPageDepthLocked(in int accountId, in int companionId)
         {
             lock (PersonalPagesDepthsLocker)
-                return PersonalPagesDepths
+                return PersonalPagesDepthsStatic
                     [new OwnerId { Id = accountId }]
-                    [new CompanionId { Id = companionId }];//проверить границы 
+                    [new CompanionId { Id = companionId }];
         }
-        public void PersonalPagesAdd(in OwnerId ownerId,
+        internal static void PersonalPagesAddLocked(in OwnerId ownerId,
                                          in Dictionary<CompanionId, PrivateMessages> temp1)
         {
             lock (PersonalPagesLocker)
-                PersonalPages.Add(ownerId, temp1);
+                PersonalPagesStatic.Add(ownerId, temp1);
         }
-        public void PersonalPagesDepthsAdd(in OwnerId ownerId,
+        internal static void PersonalPagesDepthsAddLocked(in OwnerId ownerId,
                                                 in Dictionary<CompanionId, int> temp2)
         {
             lock (PersonalPagesDepthsLocker)
-                PersonalPagesDepths.Add(ownerId, temp2);
+                PersonalPagesDepthsStatic.Add(ownerId, temp2);
         }
-        public string[] GetSectionPagesArrayLocked(in int index)
+        internal static string[] GetSectionPagesArrayLocked(in int index)
         {
             lock (SectionPagesLocker)
-                return SectionPages[index];
+                return SectionPagesStatic[index];
         }
-        public void SetSectionPagesArrayLocked(in int index, in string[] value)
+        internal static void SetSectionPagesArrayLocked(in int index, in string[] value)
         {
             lock (SectionPagesLocker)
-                SectionPages[index] = value;
+                SectionPagesStatic[index] = value;
         }
-        public string GetSectionPagesPageLocked(in int arrayIndex, in int pageIndex)
+        internal static string GetSectionPagesPageLocked(in int arrayIndex, in int pageIndex)
         {
             lock (SectionPagesLocker)
-                return SectionPages[arrayIndex][pageIndex];
+                return SectionPagesStatic[arrayIndex][pageIndex];
         }
-        public void SetSectionPagesPageLocked(in int arrayIndex, in int pageIndex, in string value)
+        internal static void SetSectionPagesPageLocked(in int arrayIndex, in int pageIndex, in string value)
         {
             lock (SectionPagesLocker)
-                SectionPages[arrayIndex][pageIndex] = value;
+                SectionPagesStatic[arrayIndex][pageIndex] = value;
         }
-        public void AddToSectionPagesPageLocked(in int arrayIndex, in int pageIndex, in string value)
+        internal static void AddToSectionPagesPageLocked(in int arrayIndex, in int pageIndex, in string value)
         {
             lock (SectionPagesLocker)
-                SectionPages[arrayIndex][pageIndex] =
-                    string.Concat(SectionPages[arrayIndex][pageIndex], value);
+                SectionPagesStatic[arrayIndex][pageIndex] =
+                    string.Concat(SectionPagesStatic[arrayIndex][pageIndex], value);
         }
-        public void InitializeSectionPagesLocked(in string[][] value)
+        internal static void InitializeSectionPagesLocked(in string[][] value)
         {
             lock (SectionPagesLocker)
-                SectionPages = value;
+                SectionPagesStatic = value;
         }
-        public int GetSectionPagesLengthLocked()
+        internal static int GetSectionPagesLengthLocked()
         {
             lock (SectionPagesLengthLocker)
-                return SectionPagesLength;
+                return SectionPagesLengthStatic;
         }
-        public void SetSectionPagesLengthLocked(in int value)
+        internal static void SetSectionPagesLengthLocked(in int value)
         {
             lock (SectionPagesLengthLocker)
-                SectionPagesLength = value;
+                SectionPagesLengthStatic = value;
         }
-        public void SetSectionPagesPageDepthLocked(in int index, in int value)
+        internal static void SetSectionPagesPageDepthLocked(in int index, in int value)
         {
             lock (SectionPagesPageDepthLocker)
-                SectionPagesPageDepth[index] = value;
+                SectionPagesPageDepthStatic[index] = value;
         }
-        public int GetSectionPagesPageDepthLocked(in int index)
+        internal static int GetSectionPagesPageDepthLocked(in int index)
         {
             lock (SectionPagesPageDepthLocker)
-                return SectionPagesPageDepth[index];
+                return SectionPagesPageDepthStatic[index];
         }
-        public void InitializeSectionPagesPageDepthLocked(in int[] value)
+        internal static void InitializeSectionPagesPageDepthLocked(in int[] value)
         {
             lock (SectionPagesPageDepthLocker)
-                SectionPagesPageDepth = value;
+                SectionPagesPageDepthStatic = value;
         }
-        public void InitializeTopicsToStart()
+        internal static void InitializeTopicsToStartLocked()
         {
             lock (TopicsToStartLocker)
-                TopicsToStart = new Queue<TopicData>();
+                TopicsToStartStatic = new Queue<TopicData>();
         }
-        public void SetSectionPagesArray(in int endpointId)
+        internal static void SetSectionPagesArrayLocked(in int endpointId)
         {
             lock (SectionPagesLocker)
                 lock (pagesLocker)
-                    pages = SectionPages[endpointId - Constants.One];
+                    PagesStatic = SectionPagesStatic[endpointId - Constants.One];
         }
-        public int GetPagesLength()
+        internal static int GetPagesLengthLocked()
         {
             lock (pagesLocker)
-                return pages.Length;
+                return PagesStatic.Length;
         }
-        public string GetLastPage()
+        internal static string GetLastPageLocked()
         {
             lock (pagesLocker)
-                return pages[pages.Length - Constants.One];
+                return PagesStatic[PagesStatic.Length - Constants.One];
         }
-        public int GetPreRegistrationLineCount()
+        internal static int GetPreRegistrationLineCountLocked()
         {
             lock (PreRegistrationLineLocker)
-                return PreRegistrationLine.Count;
+                return PreRegistrationLineStatic.Count;
         }
-        public int GetCaptchaMessagesRegistrationDataCount()
+        internal static int GetCaptchaMessagesRegistrationDataCountLocked()
         {
-            lock (CaptchaMessages_RegistrationDataLocker)
-                return CaptchaMessages_RegistrationData.Count;
+            lock (CaptchaMessagesRegistrationDataLocker)
+                return CaptchaMessagesRegistrationDataStatic.Count;
         }
-        public string GetCaptchaPageToReturn()
-        {
-            lock (CaptchaPageToReturnLocker)
-                return CaptchaPageToReturn;
-        }
-        public string GetPageToReturnRegistrationData()
-        {
-            lock (PageToReturn_RegistrationDataLocker)
-                return PageToReturn_RegistrationData;
-        }
-        public int GetPos()
-        {
-            lock (posLocker)
-                return pos;
-        }
-        public string GetTemp()
-        {
-            lock (tempLocker)
-                return temp;
-        }
-        public void SetTemp(in string value)
-        {
-            lock (tempLocker)
-                temp = value;
-        }
-        public void SetPos(in int value)
-        {
-            lock (posLocker)
-                pos = value;
-        }
-        public void SetPageToReturnRegistrationData(in string value)
-        {
-            lock (PageToReturn_RegistrationDataLocker)
-                PageToReturn_RegistrationData = value;
-        }
-        public void SetCaptchaPageToReturn(in string value)
+        internal static string GetCaptchaPageToReturnLocked()
         {
             lock (CaptchaPageToReturnLocker)
-                CaptchaPageToReturn = value;
+                return CaptchaPageToReturnStatic;
         }
-        public int GetCaptchaMessagesCount()
+        internal static string GetPageToReturnRegistrationDataLocked()
+        {
+            lock (PageToReturnRegistrationDataLocker)
+                return PageToReturnRegistrationDataStatic;
+        }
+        internal static int GetPosLocked()
+        {
+            lock (posLocker)
+                return PosStatic;
+        }
+        internal static string GetTempLocked()
+        {
+            lock (tempLocker)
+                return TempStatic;
+        }
+        internal static void SetTempLocked(in string value)
+        {
+            lock (tempLocker)
+                TempStatic = value;
+        }
+        internal static void SetPosLocked(in int value)
+        {
+            lock (posLocker)
+                PosStatic = value;
+        }
+        internal static void SetPageToReturnRegistrationDataLocked(in string value)
+        {
+            lock (PageToReturnRegistrationDataLocker)
+                PageToReturnRegistrationDataStatic = value;
+        }
+        internal static void SetCaptchaPageToReturnLocked(in string value)
+        {
+            lock (CaptchaPageToReturnLocker)
+                CaptchaPageToReturnStatic = value;
+        }
+        internal static int GetCaptchaMessagesCountLocked()
         {
             lock (CaptchaMessagesLocker)
-                return CaptchaMessages.Count;
+                return CaptchaMessagesStatic.Count;
         }
-        public int GetRegistrationLineCount()
+        internal static int GetRegistrationLineCountLocked()
         {
             lock (RegistrationLineLocker)
-                return RegistrationLine.Count;
+                return RegistrationLineStatic.Count;
         }
-        public int GetPersonalMessagesToPublishCount()
+        internal static int GetPersonalMessagesToPublishCountLocked()
         {
             lock (PersonalMessagesToPublishLocker)
-                return PersonalMessagesToPublish.Count;
+                return PersonalMessagesToPublishStatic.Count;
         }
-        public int GetDialogsToStartCount()
+        internal static int GetDialogsToStartCountLocked()
         {
             lock (DialogsToStartLocker)
-                return DialogsToStart.Count;
+                return DialogsToStartStatic.Count;
         }
-        public int GetMessagesToPublishCount()
+        internal static int GetMessagesToPublishCountLocked()
         {
             lock (MessagesToPublishLocker)
-                return MessagesToPublish.Count;
+                return MessagesToPublishStatic.Count;
         }
-        public int GetTopicsToStartCount()
+        internal static int GetTopicsToStartCountLocked()
         {
             lock (TopicsToStartLocker)
-                return TopicsToStart.Count;
+                return TopicsToStartStatic.Count;
         }
-        public int GetThreadsCount()
+        internal static int GetThreadsCountLocked()
         {
             lock (threadsCountLocker)
-                return threadsCount;
+                return ThreadsCountStatic;
         }
-        public string[] GetPages()
+        internal static string[] GetPagesLocked()
         {
             lock (pagesLocker)
-                return pages;
+                return PagesStatic;
         }
-        public void SetThreadsCount(in int threadsCount)
+        internal static void SetThreadsCountLocked(in int threadsCount)
         {
             lock (threadsCountLocker)
-                Memory.threadsCount = threadsCount;
+                Fast.ThreadsCountStatic = threadsCount;
         }
-        public void SetPages(in string[] temp)
+        internal static void SetPagesLocked(in string[] temp)
         {
             lock (pagesLocker)
-                pages = temp;
+                PagesStatic = temp;
         }
-        public bool SpecialSearch(in char c)
+        internal static bool SpecialSearchLocked(in char c)
         {
             lock (SpecialLocker)
             {
@@ -600,344 +602,342 @@ namespace Data
                 return false;
             }
         }
-        public void SetLastPage(in string value)
+        internal static void SetLastPageLocked(in string value)
         {
             lock (pagesLocker)
-                pages[pages.Length - Constants.One] = value;
+                PagesStatic[PagesStatic.Length - Constants.One] = value;
         }
-        public string GetPage(in int num)
+        internal static string GetPageLocked(in int num)
         {
             lock (pagesLocker)
-                return pages[num];
+                return PagesStatic[num];
         }
-        public void SetPage(in int index, in string value)
+        internal static void SetPageLocked(in int index, in string value)
         {
             lock (pagesLocker)
-                pages[index] = value;
+                PagesStatic[index] = value;
         }
-        public void TopicsToStartEnqueue(in TopicData value)
+        internal static void TopicsToStartEnqueueLocked(in TopicData value)
         {
             lock (TopicsToStartLocker)
-                TopicsToStart.Enqueue(value);
+                TopicsToStartStatic.Enqueue(value);
         }
-        public int GetProfilesOnPreSaveLineCount()
+        internal static int GetProfilesOnPreSaveLineCountLocked()
         {
             lock (PreSaveProfilesLineLocker)
-                return PreSaveProfilesLine.Count;
+                return PreSaveProfilesLineStatic.Count;
         }
-        public void PreSaveProfilesLineEnqueueLocked(in PreProfile preProfile)
+        internal static void PreSaveProfilesLineEnqueueLocked(in PreProfile preProfile)
         {
             lock (PreSaveProfilesLineLocker)
-                PreSaveProfilesLine.Enqueue(preProfile);
+                PreSaveProfilesLineStatic.Enqueue(preProfile);
         }
-        public PreProfile PreSaveProfilesLineDequeueLocked()
+        internal static PreProfile PreSaveProfilesLineDequeueLocked()
         {
             lock (PreSaveProfilesLineLocker)
-                return PreSaveProfilesLine.Dequeue();
+                return PreSaveProfilesLineStatic.Dequeue();
         }
-        public char GetNextRandomCaptchaSymbol()
+        internal static char GetNextRandomCaptchaSymbolLocked()
         {
             lock (RandomLocker)
-                return Constants.CaptchaLetters[Random.Next(Constants.CaptchaLetters.Length - Constants.One)];
+                return Constants.CaptchaLetters[RandomStatic.Next(Constants.CaptchaLetters.Length - Constants.One)];
         }
-        public void InitializePreSaveProfilesLine()
+        internal static void InitializePreSaveProfilesLineLocked()
         {
             lock (PreSaveProfilesLineLocker)
-                PreSaveProfilesLine = new Queue<PreProfile>();
+                PreSaveProfilesLineStatic = new Queue<PreProfile>();
         }
 
-        public void InitializeRandom()
+        internal static void InitializeRandomLocked()
         {
             lock (RandomLocker)
-                Random = new Random();
+                RandomStatic = new Random();
         }
-        public TopicData TopicsToStartDequeue()
+        internal static TopicData TopicsToStartDequeueLocked()
         {
             lock (TopicsToStartLocker)
-            {
-                return TopicsToStart.Dequeue();
-            }
+                return TopicsToStartStatic.Dequeue();
         }
-        public void InitializeOwnProfilePages()
+        internal static void InitializeOwnProfilePagesLocked()
         {
             lock (OwnProfilePagesLocker)
-                OwnProfilePages = new Dictionary<int, string>();
+                OwnProfilePagesStatic = new Dictionary<int, string>();
         }
-        public void InitializePublicProfilePages()
+        internal static void InitializePublicProfilePagesLocked()
         {
             lock (PublicProfilePagesLocker)
-                PublicProfilePages = new Dictionary<int, string>();
+                PublicProfilePagesStatic = new Dictionary<int, string>();
         }
-        public bool ThreadPagesContainsThreadIdLocked(in int threadId)
+        internal static bool ThreadPagesContainsThreadIdLocked(in int threadId)
         {
             lock (ThreadPagesLocker)
-                return ThreadPages.ContainsKey(threadId);
+                return ThreadPagesStatic.ContainsKey(threadId);
         }
-        public void AddOrUpdateOwnProfilePage(in int accountId, in string page)
+        internal static void AddOrUpdateOwnProfilePageLocked(in int accountId, in string page)
         {
             lock (OwnProfilePagesLocker)
-                if (OwnProfilePages.ContainsKey(accountId))
-                    OwnProfilePages[accountId] = page;
+                if (OwnProfilePagesStatic.ContainsKey(accountId))
+                    OwnProfilePagesStatic[accountId] = page;
                 else
-                    OwnProfilePages.Add(accountId, page);
+                    OwnProfilePagesStatic.Add(accountId, page);
         }
-        public void AddOrUpdatePublicProfilePage(in int accountId, in string page)
+        internal static void AddOrUpdatePublicProfilePageLocked(in int accountId, in string page)
         {
             lock (PublicProfilePagesLocker)
-                if (PublicProfilePages.ContainsKey(accountId))
-                    PublicProfilePages[accountId] = page;
+                if (PublicProfilePagesStatic.ContainsKey(accountId))
+                    PublicProfilePagesStatic[accountId] = page;
                 else
-                    PublicProfilePages.Add(accountId, page);
+                    PublicProfilePagesStatic.Add(accountId, page);
         }
-        public string GetPublicProfilePage(in int accountId)
+        internal static string GetPublicProfilePageLocked(in int accountId)
         {
             lock (PublicProfilePagesLocker)
-                if (PublicProfilePages.ContainsKey(accountId))
-                    return PublicProfilePages[accountId];
+                if (PublicProfilePagesStatic.ContainsKey(accountId))
+                    return PublicProfilePagesStatic[accountId];
                 else
                     return null;
         }
-        public string GetOwnProfilePage(in int accountId)
+        internal static string GetOwnProfilePageLocked(in int accountId)
         {
             lock (OwnProfilePagesLocker)
-                return OwnProfilePages[accountId];
+                return OwnProfilePagesStatic[accountId];
         }
-        public void SetThreadPagesPageLocked
+        internal static void SetThreadPagesPageLocked
             (in int arrayIndex, in int pageIndex, in string value)
         {
             lock (ThreadPagesLocker)
-                ThreadPages[arrayIndex][pageIndex] = value;
+                ThreadPagesStatic[arrayIndex][pageIndex] = value;
         }
-        public string GetThreadPagesPageLocked
+        internal static string GetThreadPagesPageLocked
             (in int arrayIndex, in int pageIndex)
         {
             lock (ThreadPagesLocker)
-                return ThreadPages[arrayIndex][pageIndex];
+                return ThreadPagesStatic[arrayIndex][pageIndex];
         }
-        public string[] GetThreadPagesArrayLocked(in int arrayIndex)
+        internal static string[] GetThreadPagesArrayLocked(in int arrayIndex)
         {
             lock (ThreadPagesLocker)
-                return ThreadPages[arrayIndex];
+                return ThreadPagesStatic[arrayIndex];
         }
-        public void SetThreadPagesArrayLocked
+        internal static void SetThreadPagesArrayLocked
                 (in int arrayIndex, in string[] value)
         {
             lock (ThreadPagesLocker)
-                ThreadPages[arrayIndex] = value;
+                ThreadPagesStatic[arrayIndex] = value;
         }
-        public void AddToThreadPagesPageLocked
+        internal static void AddToThreadPagesPageLocked
                 (in int arrayIndex, in int pageIndex, in string value)
         {
             lock (ThreadPagesLocker)
-                ThreadPages[arrayIndex][pageIndex] =
-                    string.Concat(ThreadPages[arrayIndex][pageIndex], value);
+                ThreadPagesStatic[arrayIndex][pageIndex] =
+                    string.Concat(ThreadPagesStatic[arrayIndex][pageIndex], value);
         }
-        public void CorrectMessagesArray
+        internal static void CorrectMessagesArrayLocked
             (Func<int, int, string, int, string, string, string> GetNewPage, in int endpointId, in int threadId, in string message,
                 in int accountId, in string threadName, in string nick)
         {
-            Dictionary<int, string[]> threadPages = GetThreadPagesLocked();
-
             lock (ThreadPagesLocker)
             {
                 lock (ThreadPagesPageDepthLocker)
                 {
                     SetThreadPagesPageDepthLocked(threadId, Constants.One);
-                    ThreadPages.Add(threadId, new string[] {
+                    ThreadPagesStatic.Add(threadId, new string[] {
                 GetNewPage(threadId, endpointId, threadName,
                     accountId, nick, message) });
                 }
             }
         }
-        public void InitializeThreadPagesLocked(in int threadsCount)
+        internal static void InitializeThreadPagesLocked(in int threadsCount)
         {
             lock (ThreadPagesLocker)
-                ThreadPages = new Dictionary<int, string[]>(threadsCount);
+                ThreadPagesStatic = new Dictionary<int, string[]>(threadsCount);
         }
-        public Dictionary<int, string[]> GetThreadPagesLocked()
+        internal static Dictionary<int, string[]> GetThreadPagesLocked()
         {
             lock (ThreadPagesLocker)
-                return ThreadPages;
+                return ThreadPagesStatic;
         }
-        public int GetThreadPagesPageDepthLocked(in int index)
+        internal static int GetThreadPagesPageDepthLocked(in int index)
         {
             lock (ThreadPagesPageDepthLocker)
-                return ThreadPagesPageDepth[index];
+                return ThreadPagesPageDepthStatic[index];
         }
-        public void AddToThreadPagesPageDepthLocked(in int index, in int value)
+        internal static void AddToThreadPagesPageDepthLocked(in int index, in int value)
         {
             lock (ThreadPagesPageDepthLocker)
-                ThreadPagesPageDepth[index] += value;
+                ThreadPagesPageDepthStatic[index] += value;
         }
-        public void SetThreadPagesPageDepthLocked(in int index, in int value)
+        internal static void SetThreadPagesPageDepthLocked(in int index, in int value)
         {
             lock (ThreadPagesPageDepthLocker)
-                ThreadPagesPageDepth[index] = value;
+                ThreadPagesPageDepthStatic[index] = value;
         }
-        public void InitializeThreadPagesPageDepthLocked(in int threadsCount)
+        internal static void InitializeThreadPagesPageDepthLocked(in int threadsCount)
         {
             lock (ThreadPagesPageDepthLocker)
-                ThreadPagesPageDepth = new Dictionary<int, int>(threadsCount);
+                ThreadPagesPageDepthStatic = new Dictionary<int, int>(threadsCount);
         }
-        public void InitializeMessagesToPublish()
+        internal static void InitializeMessagesToPublishLocked()
         {
             lock (MessagesToPublishLocker)
-                MessagesToPublish = new Queue<MessageData>();
+                MessagesToPublishStatic = new Queue<MessageData>();
         }
-        public void MessagesToPublishEnqueue(in MessageData messageData)
+        internal static void MessagesToPublishEnqueueLocked(in MessageData messageData)
         {
             lock (MessagesToPublishLocker)
-                MessagesToPublish.Enqueue(messageData);
+                MessagesToPublishStatic.Enqueue(messageData);
         }
-        public MessageData MessagesToPublishDequeue()
+        internal static MessageData MessagesToPublishDequeueLocked()
         {
             lock (MessagesToPublishLocker)
-            {
-                return MessagesToPublish.Dequeue();
-            }
+                return MessagesToPublishStatic.Dequeue();
         }
-        public void PreRegistrationLineAdd(in int val, in PreRegBag bag)
+        internal static void PreRegistrationLineAddLocked(in int val, in PreRegBag bag)
         {
             lock (PreRegistrationLineLocker)
-                PreRegistrationLine.Add(val, bag);
+                PreRegistrationLineStatic.Add(val, bag);
         }
-        public void InitializePreRegistrationLine()
+        internal static void InitializePreRegistrationLineLocked()
         {
             lock (PreRegistrationLineLocker)
-                PreRegistrationLine = new Dictionary<int, PreRegBag>();
+                PreRegistrationLineStatic = new Dictionary<int, PreRegBag>();
         }
-        public void InitializeRegistrationLine()
+        internal static void InitializeRegistrationLineLocked()
         {
             lock (RegistrationLineLocker)
-                RegistrationLine = new Dictionary<int, RegBag>();
+                RegistrationLineStatic = new Dictionary<int, RegBag>();
         }
-        public void CaptchaMessagesRegistrationDataEnqueue(in uint captchaHash)
+        internal static void CaptchaMessagesRegistrationDataEnqueueLocked(in uint captchaHash)
         {
-            lock (CaptchaMessages_RegistrationDataLocker)
-                CaptchaMessages_RegistrationData.Enqueue(captchaHash);
+            lock (CaptchaMessagesRegistrationDataLocker)
+                CaptchaMessagesRegistrationDataStatic.Enqueue(captchaHash);
         }
-        public void CaptchaMessagesRegistrationDataDequeue()
+        internal static void CaptchaMessagesRegistrationDataDequeueLocked()
         {
-            lock (CaptchaMessages_RegistrationDataLocker)
-                CaptchaMessages_RegistrationData.Dequeue();
+            lock (CaptchaMessagesRegistrationDataLocker)
+                CaptchaMessagesRegistrationDataStatic.Dequeue();
         }
-        public void InitializeCaptchaMessagesRegistrationData()
+        internal static void InitializeCaptchaMessagesRegistrationDataLocked()
         {
-            lock (CaptchaMessages_RegistrationDataLocker)
-                CaptchaMessages_RegistrationData = new Queue<uint>(Constants.RegistrationPagesCount);
+            lock (CaptchaMessagesRegistrationDataLocker)
+                CaptchaMessagesRegistrationDataStatic = new Queue<uint>(Constants.RegistrationPagesCount);
         }
-        public bool CaptchaMessagesRegistrationDataContains(in uint captcha)
+        internal static bool CaptchaMessagesRegistrationDataContainsLocked(in uint captcha)
         {
-            lock (CaptchaMessages_RegistrationDataLocker)
-                return CaptchaMessages_RegistrationData.Contains(captcha);
+            lock (CaptchaMessagesRegistrationDataLocker)
+                return CaptchaMessagesRegistrationDataStatic.Contains(captcha);
         }
-        public void RegistrationLineRemove(in int i, out RegBag regBag)
+        internal static void RegistrationLineRemoveLocked(in int i, out RegBag regBag)
         {
             lock (RegistrationLineLocker)
             {
-                RegistrationLine.Remove(i, out RegBag bag);
+                RegistrationLineStatic.Remove(i, out RegBag bag);
                 regBag = bag;
             }
         }
-        public void PreRegistrationLineRemove(in int key, out PreRegBag preRegBag)
+        internal static void PreRegistrationLineRemoveLocked(in int key, out PreRegBag preRegBag)
         {
             lock (PreRegistrationLineLocker)
             {
-                PreRegistrationLine.Remove(key, out PreRegBag temp);
+                PreRegistrationLineStatic.Remove(key, out PreRegBag temp);
                 preRegBag = temp;
             }
         }
-        public void RegistrationLineAdd(in int val, in RegBag regBag)
+        internal static void RegistrationLineAddLocked(in int val, in RegBag regBag)
         {
             lock (RegistrationLineLocker)
-                RegistrationLine.Add(val, regBag);
+                RegistrationLineStatic.Add(val, regBag);
         }
-        public void CaptchaMessagesEnqueue(in uint captchaHash)
+        internal static void CaptchaMessagesEnqueueLocked(in uint captchaHash)
         {
             lock (CaptchaMessagesLocker)
-                CaptchaMessages.Enqueue(captchaHash);
+                CaptchaMessagesStatic.Enqueue(captchaHash);
         }
-        public void InitializeCaptchaMessages()
+        internal static void InitializeCaptchaMessagesLocked()
         {
             lock (CaptchaMessagesLocker)
-                CaptchaMessages = new Queue<uint>(Constants.LoginPagesCount);
+                CaptchaMessagesStatic = new Queue<uint>(Constants.LoginPagesCount);
         }
-        public void CaptchaMessagesDequeue()
+        internal static void CaptchaMessagesDequeueLocked()
         {
             lock (CaptchaMessagesLocker)
-                CaptchaMessages.Dequeue();
+                CaptchaMessagesStatic.Dequeue();
         }
-        public bool CaptchaMessagesContains(in uint captchaHash)
+        internal static bool CaptchaMessagesContainsLocked(in uint captchaHash)
         {
             lock (CaptchaMessagesLocker)
-                return CaptchaMessages.Contains(captchaHash);
+                return CaptchaMessagesStatic.Contains(captchaHash);
         }
-        public bool LoginPasswordHashesValuesContains(in Guid guid)
+        internal static bool LoginPasswordHashesValuesContainsLocked(in Guid guid)
         {
             lock (LoginPasswordHashesLocker)
-                return LoginPasswordHashes.ContainsValue(guid);
+                return LoginPasswordHashesStatic.ContainsValue(guid);
         }
-        public Tuple<bool, int> CheckGuidAndGetOwnerAccountId(Guid guid)
+        internal static Tuple<bool, int> CheckGuidAndGetOwnerAccountIdLocked(Guid guid)
         {
             lock (LoginPasswordHashesLocker)
                 lock (LoginPasswordAccIdHashesLocker)
-                    if (LoginPasswordHashes.ContainsValue(guid))
-                        return new Tuple<bool, int>(true, LoginPasswordAccIdHashes[LoginPasswordHashes.Single(p => p.Value == guid).Key]);
+                    if (LoginPasswordHashesStatic.ContainsValue(guid))
+                        return new Tuple<bool, int>(true, LoginPasswordAccIdHashesStatic[LoginPasswordHashesStatic.Single(p => p.Value == guid).Key]);
                     else
                         return new Tuple<bool, int>(false, Constants.Zero);
         }
-        public void SetLoginPasswordHashesPairToken(in Pair pair, in Guid? token)
+        internal static void SetLoginPasswordHashesPairTokenLocked(in Pair pair, in Guid? token)
         {
             lock (LoginPasswordHashesLocker)
-                LoginPasswordHashes[pair] = token;
+                LoginPasswordHashesStatic[pair] = token;
         }
-        private bool IncrementWithValueRemoteIpHashesAttemptsCountersAndGrantAccessAndAddIfNotPresented(in uint ipHash, in byte value)
+        private static bool IncrementWithValueRemoteIpHashesAttemptsCountersAndGrantAccessAndAddIfNotPresentedLocked(in uint ipHash, in byte value)
         {
             lock (RemoteIpHashesAttemptsCounterLocker)
             {
-                if (!RemoteIpHashesAttemptsCounter.ContainsKey(ipHash))
-                    RemoteIpHashesAttemptsCounter.Add(ipHash, value);
-                short sum = (short)(value + RemoteIpHashesAttemptsCounter[ipHash]);
+                if (!RemoteIpHashesAttemptsCounterStatic.ContainsKey(ipHash))
+                    RemoteIpHashesAttemptsCounterStatic.Add(ipHash, value);
+                short sum = (short)(value + RemoteIpHashesAttemptsCounterStatic[ipHash]);
 
                 if (sum > Constants.MaxAttemptsCountPerIp)
                 {
-                    RemoteIpHashesAttemptsCounter[ipHash] = Constants.MaxAttemptsCountPerIp;
+                    RemoteIpHashesAttemptsCounterStatic[ipHash] = Constants.MaxAttemptsCountPerIp;
 
                     return false;
                 }
                 else
                 {
-                    RemoteIpHashesAttemptsCounter[ipHash] = (byte)sum;
+                    RemoteIpHashesAttemptsCounterStatic[ipHash] = (byte)sum;
 
                     return true;
                 }
             }
         }
-        public void DecrementAllRemoteIpHashesAttemptsCountersAndRemoveUnnecessaryByTimer()
+        internal static void DecrementAllRemoteIpHashesAttemptsCountersAndRemoveUnnecessaryByTimerLocked()
         {
             lock (RemoteIpHashesAttemptsCounterLocker)
-                foreach (var pair in RemoteIpHashesAttemptsCounter)
+                foreach (var pair in RemoteIpHashesAttemptsCounterStatic)
                     if (pair.Value > Constants.One)
-                        RemoteIpHashesAttemptsCounter[pair.Key] = (byte)(pair.Value - Constants.One);
+                        RemoteIpHashesAttemptsCounterStatic[pair.Key] = (byte)(pair.Value - Constants.One);
                     else
-                        RemoteIpHashesAttemptsCounter.Remove(pair.Key);
+                        RemoteIpHashesAttemptsCounterStatic.Remove(pair.Key);
         }
-        public void InitializeRemoteIpHashesAttemptsCounter()
+        internal static void InitializeRemoteIpHashesAttemptsCounterLocked()
         {
             lock (RemoteIpHashesAttemptsCounterLocker)
-                RemoteIpHashesAttemptsCounter = new Dictionary<uint, byte>();
+                RemoteIpHashesAttemptsCounterStatic = new Dictionary<uint, byte>();
         }
-        public void LoginPasswordHashesThroughIterationCheck(ref Pair pair, in Guid guid)
+        internal static void LoginPasswordHashesThroughIterationCheckLocked(out Pair pair, in Guid guid)
         {
             lock (LoginPasswordHashesLocker)
-                if (LoginPasswordHashes.ContainsValue(guid))
-                    foreach (var key in LoginPasswordHashes.Keys)
-                        if (LoginPasswordHashes[key] == guid)
+            {
+                pair = new Pair();
+
+                if (LoginPasswordHashesStatic.ContainsValue(guid))
+                    foreach (var key in LoginPasswordHashesStatic.Keys)
+                        if (LoginPasswordHashesStatic[key] == guid)
                         {
                             pair = key;
 
                             break;
                         }
+            }
         }
     }
 }

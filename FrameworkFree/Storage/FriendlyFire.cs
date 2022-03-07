@@ -3,186 +3,136 @@ using SysTime = System.Timers;
 using System;
 using System.Diagnostics;
 using System.Net;
-using static Data.DataLockers.Lockers;
-namespace Data
+using Own.Types;
+using Own.Permanent;
+using Own.Storage;
+using static Own.DataLockers.Lockers;
+namespace App.Controllers
 {//временная замена Storage - проброс вызовов - Slow делает Fast = Slow
-    internal sealed class FriendlyFire : IFriendlyFire
+    internal static class FriendlyFire
     {
-        private readonly IPrivateDialogLogic PrivateDialogLogic;
-        private readonly IPrivateMessageLogic PrivateMessageLogic;
-        private readonly IAccountLogic AccountLogic;
-        private readonly IEndPointLogic EndPointLogic;
-        private readonly IForumLogic ForumLogic;
-        private readonly IStorage Storage;
-        private readonly INewPrivateDialogLogic NewPrivateDialogLogic;
-        private readonly INewPrivateMessageLogic NewPrivateMessageLogic;
-        private readonly ISectionLogic SectionLogic;
-        private readonly INewTopicLogic NewTopicLogic;
-        private readonly IThreadLogic ThreadLogic;
-        private readonly IReplyLogic ReplyLogic;
-        private readonly IRegistrationLogic RegistrationLogic;
-        private readonly ILoginLogic LoginLogic;
-        private readonly Captcha Captcha;
-        private readonly IAuthenticationLogic AuthenticationLogic;
-        private readonly IProfileLogic ProfileLogic;
-        public FriendlyFire(IAccountLogic accountLogic,
-        IStorage storage,
-        IEndPointLogic endPointLogic,
-        IPrivateDialogLogic privateDialogLogic,
-        IPrivateMessageLogic privateMessageLogic,
-        IForumLogic forumLogic,
-        INewPrivateDialogLogic newPrivateDialogLogic,
-        INewPrivateMessageLogic newPrivateMessageLogic,
-        ISectionLogic sectionLogic,
-        INewTopicLogic newTopicLogic,
-        IThreadLogic threadLogic,
-        IReplyLogic replyLogic,
-        IRegistrationLogic registrationLogic,
-        ILoginLogic loginLogic,
-        Captcha captcha,
-        IAuthenticationLogic authenticationLogic,
-        IProfileLogic profileLogic)
-        {
-            Storage = storage;
-            AccountLogic = accountLogic;
-            EndPointLogic = endPointLogic;
-            PrivateDialogLogic = privateDialogLogic;
-            PrivateMessageLogic = privateMessageLogic;
-            ForumLogic = forumLogic;
-            NewPrivateMessageLogic = newPrivateMessageLogic;
-            SectionLogic = sectionLogic;
-            NewTopicLogic = newTopicLogic;
-            ThreadLogic = threadLogic;
-            ReplyLogic = replyLogic;
-            RegistrationLogic = registrationLogic;
-            LoginLogic = loginLogic;
-            Captcha = captcha;
-            AuthenticationLogic = authenticationLogic;
-            NewPrivateDialogLogic = newPrivateDialogLogic;
-            ProfileLogic = profileLogic;
-            Initialize();
-        }
-        public void FillStorage()
+        internal static void FillStorageVoid()
         { // перед изменением порядка следования проверять корректность правки
-            Storage.Fast.InitializeRandom();
-            AccountLogic.LoadAccounts();
-            AccountLogic.LoadNicks();
-            ForumLogic.LoadMainPage();
-            SectionLogic.LoadSectionPages();
-            ThreadLogic.LoadThreadPages();
-            EndPointLogic.LoadEndPointPages();
-            PrivateDialogLogic.LoadDialogPages();
-            PrivateMessageLogic.LoadPersonalPages();
-            ProfileLogic.LoadProfiles();
-            Storage.Fast.InitializeCaptchaMessagesRegistrationData();
-            Storage.Fast.InitializeCaptchaMessages();
-            Storage.Slow.InitializeBlockedIpsHashes();
+            Fast.InitializeRandomLocked();
+            Own.Sequential.Unstable.LoadAccountsVoid();
+            Own.Sequential.Unstable.LoadNicksVoid();
+            Own.Sequential.Unstable.LoadMainPageVoid();
+            Own.Sequential.Unstable.LoadSectionPagesVoid();
+            Own.Sequential.Unstable.LoadThreadPagesVoid();
+            Own.Sequential.Unstable.LoadEndPointPagesVoid();
+            Own.Sequential.Unstable.LoadDialogPagesVoid();
+            Own.Sequential.Unstable.LoadPersonalPagesVoid();
+            Own.Sequential.Unstable.LoadProfilesVoid();
+            Fast.InitializeCaptchaMessagesRegistrationDataLocked();
+            Fast.InitializeCaptchaMessagesLocked();
+            Slow.InitializeBlockedIpsHashesVoid();
         }
-        public void StartTimer()
+        internal static void StartTimerVoid()
         {
             Process.GetCurrentProcess().PriorityBoostEnabled = true;
-            //Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.High; Exception - permission denied
             SysThread.Thread.CurrentThread.Priority = SysThread.ThreadPriority.Highest;
-            Storage.Fast.InitializeRegistrationLine();
-            SysTime.Timer commonTimer = new SysTime.Timer(1000);
-            commonTimer.Elapsed += TimerEventHandler;
+            Fast.InitializeRegistrationLineLocked();
+            SysTime.Timer commonTimer = new SysTime.Timer(Constants.TimerPeriodMilliseconds);
+            commonTimer.Elapsed += TimerEventHandlerVoid;
             commonTimer.AutoReset = true;
             commonTimer.Start();
         }
-        private void TimerEventHandler(Object source, SysTime.ElapsedEventArgs e)
+        private static void TimerEventHandlerVoid(Object source, SysTime.ElapsedEventArgs e)
         {
-            if (Storage.Fast.CheckIfTimerIsWorking())
+            if (Fast.CheckIfTimerIsWorkingLocked())
             { }
             else
             {
-                Storage.Fast.SetTimerIsWorkingFlag();
-                AuthenticationLogic.FlushAccountIdentifierRemoteIpLogByTimer();
-                LoginLogic.InitPageByTimer();
-                RegistrationLogic.RefreshLogRegPagesByTimer();
-                AccountLogic.CheckAccountIdByTimer();
-                RegistrationLogic.RegisterInBaseByTimer();
-                NewTopicLogic.StartNextTopicByTimer();
-                ReplyLogic.PublishNextMessageByTimer();
-                NewPrivateMessageLogic.PublishNextPrivateMessageByTimer();
-                NewPrivateDialogLogic.StartNextDialogByTimer();
-                RegistrationLogic.PutRegInfoByTimer();
-                Storage.Fast.DecrementAllRemoteIpHashesAttemptsCountersAndRemoveUnnecessaryByTimer();
-                ProfileLogic.HandleAndSaveProfilesByTimer();
-                Storage.Fast.ResetTimerIsWorkingFlag();
+                Fast.SetTimerIsWorkingFlagLocked();
+                Own.Sequential.Unstable.FlushAccountIdentifierRemoteIpLogByTimerVoid();
+                Own.Sequential.Unstable.InitPageByTimerVoid();
+                Own.Sequential.Unstable.RefreshLogRegPagesByTimerVoid();
+                Own.Sequential.Unstable.CheckAccountIdByTimerVoid();
+                Own.Sequential.Unstable.RegisterInBaseByTimerVoid();
+                Own.Sequential.Unstable.StartNextTopicByTimerVoid();
+                Own.Sequential.Unstable.PublishNextMessageByTimerVoid();
+                Own.Sequential.Unstable.PublishNextPrivateMessageByTimerVoid();
+                Own.Sequential.Unstable.StartNextDialogByTimerVoid();
+                Own.Sequential.Unstable.PutRegInfoByTimerVoid();
+                Fast.DecrementAllRemoteIpHashesAttemptsCountersAndRemoveUnnecessaryByTimerLocked();
+                Own.Sequential.Unstable.HandleAndSaveProfilesByTimerVoid();
+                Fast.ResetTimerIsWorkingFlagLocked();
             }
         }
-        public void InitializeStorage()
+        internal static void InitializeStorageVoid()
         {
-            Storage.Fast.InitializePreSaveProfilesLine();
-            Storage.Fast.InitializeOwnProfilePages();
-            Storage.Fast.InitializePublicProfilePages();
-            Storage.Fast.InitializeAccountIdentifierRemoteIpLog();
-            Storage.Fast.InitializePreRegistrationLine();
-            Storage.Fast.InitializeTopicsToStart();
-            Storage.Fast.InitializeMessagesToPublish();
-            Storage.Fast.InitializePrivateMessages();
-            Storage.Fast.InitializePersonalMessagesToPublish();
-            Storage.Fast.InitializeDialogsToStart();
-            Storage.Fast.InitializeRemoteIpHashesAttemptsCounter();
+            Fast.InitializePreSaveProfilesLineLocked();
+            Fast.InitializeOwnProfilePagesLocked();
+            Fast.InitializePublicProfilePagesLocked();
+            Fast.InitializeAccountIdentifierRemoteIpLogLocked();
+            Fast.InitializePreRegistrationLineLocked();
+            Fast.InitializeTopicsToStartLocked();
+            Fast.InitializeMessagesToPublishLocked();
+            Fast.InitializePrivateMessagesLocked();
+            Fast.InitializePersonalMessagesToPublishLocked();
+            Fast.InitializeDialogsToStartLocked();
+            Fast.InitializeRemoteIpHashesAttemptsCounterLocked();
         }
-        public void Initialize()
+        internal static void InitializeVoid()
         {
             lock (InitializationTransactionLocker)
             {
-                InitializeStorage();
-                FillStorage();
-                StartTimer();
+                InitializeStorageVoid();
+                FillStorageVoid();
+                StartTimerVoid();
             }
         }
-        public bool CheckIp(IPAddress ipAddress, byte incValue = Constants.Fifty)
-        => Storage.Fast.CheckIp(ipAddress, incValue);
-        public void RemoveAccountByNickIfExists(string uniqueNick)
-            => Storage.Slow.RemoveAccountByNickIfExists(uniqueNick);
-        public string ForumLogic_GetMainPageLocked()
-           => Storage.Fast.GetMainPageLocked();
-        public Tuple<bool, int> AuthneticationLogic_AccessGrantedExtended(string token)
-            => AuthenticationLogic.AccessGrantedEntended(token);
-        public string GetPublicProfilePageIfExists(int accountId)
-            => Storage.Fast.GetPublicProfilePage(accountId);
-        public string GetOwnProfilePage(int accountId)
-            => Storage.Fast.GetOwnProfilePage(accountId);
-        public string ThreadData_GetThreadPage(int? id, int? page)
-           => ThreadLogic.GetThreadPage(id, page);
-        public string ForumLogic_GetMainContentLocked()
-           => Storage.Fast.GetMainContentLocked();
-        public string SectionLogic_GetSectionPage(int? id, int? page)
-         => SectionLogic.GetSectionPage(id, page);
-        public string EndPointLogic_GetEndPointPage(int? id)
-        => EndPointLogic.GetEndPointPage(id);
-        public string LoginData_CheckAndAuth(IPAddress ip, string captcha, string login, string password)
-         => LoginLogic.CheckAndAuth(ip, captcha, login, password);
-        public string GetRegistrationDataPageToReturn()
-        => Storage.Fast.GetPageToReturnRegistrationData();
-        public bool AuthenticationLogic_AccessGranted(string token)
-        => AuthenticationLogic.AccessGranted(token);
-        public void ReplyData_Start(int? id, Pair pair, string t)
-        => ReplyLogic.Start(id, pair, t);
-        public Pair AuthenticationLogic_GetPair(string token)
-        => AuthenticationLogic.GetPair(token);
-        public string LoginData_GetPageToReturn()
-        => Storage.Fast.GetCaptchaPageToReturn();
-        public void ProfileLogic_Start(int accountId, string aboutMe,
+        internal static bool CheckIp(IPAddress ipAddress, byte incValue = Constants.Fifty)
+        => Fast.CheckIp(ipAddress, incValue);
+#if DEBUG
+        internal static void RemoveAccountByNickIfExistsVoid(string uniqueNick)
+        => Slow.RemoveAccountByNickIfExistsVoid(uniqueNick);
+#endif
+        internal static string ForumGetMainPageNullable()
+           => Fast.GetMainPageLocked();
+        internal static Tuple<bool, int> AuthneticationLogicAccessGrantedExtendedNullable(string token)
+            => Own.InRace.Unstable.AccessGrantedEntendedNullable(token);
+        internal static string GetPublicProfilePageIfExistsNullable(int accountId)
+            => Fast.GetPublicProfilePageLocked(accountId);
+        internal static string GetOwnProfilePageNullable(int accountId)
+            => Fast.GetOwnProfilePageLocked(accountId);
+        internal static string ThreadGetThreadPageNullable(int? id, int? page)
+           => Own.InRace.Unstable.GetThreadPageNullable(id, page);
+        internal static string ForumGetMainContentLockedNullable()
+           => Fast.GetMainContentLocked();
+        internal static string SectionGetSectionPageNullable(int? id, int? page)
+         => Own.InRace.Unstable.GetSectionPageNullable(id, page);
+        internal static string EndPointGetEndPointPageNullable(int? id)
+        => Own.InRace.Unstable.GetEndPointPageNullable(id);
+        internal static string LoginCheckAndAuthNullable(IPAddress ip, string captcha, string login, string password)
+         => Own.InRace.Unstable.CheckAndAuthNullable(ip, captcha, login, password);
+        internal static string GetRegistrationDataPageToReturnNullable()
+        => Fast.GetPageToReturnRegistrationDataLocked();
+        internal static bool AuthenticationAccessGranted(string token)
+        => Own.InRace.Unstable.AccessGranted(token);
+        internal static void ReplyStartVoid(int? id, Pair pair, string t)
+        => Own.InRace.Unstable.StartReplyVoid(id, pair, t);
+        internal static Pair AuthenticationGetPair(string token)
+        => Own.InRace.Unstable.GetPair(token);
+        internal static string LoginGetPageToReturnNullable()
+        => Fast.GetCaptchaPageToReturnLocked();
+        internal static void ProfileStartVoid(int accountId, string aboutMe,
             bool[] flags, byte[] file)
-        => ProfileLogic.Start(accountId, aboutMe, flags, file);
-        public int GetDialogPagesLengthFast()
-        => Storage.Fast.GetDialogPagesLengthLocked();
-        public void RegistrationData_PreRegistration(string captcha, string login,
-            string password, string email, string nick)
-        => RegistrationLogic.PreRegistration(captcha, login, password, email, nick);
-        public void NewTopicData_Start(string t, int? id, Pair pair, string m)
-        => NewTopicLogic.Start(t, id, pair, m);
-        public string PrivateDialogLogic_GetDialogPage(int? id, Pair pair)
-        => PrivateDialogLogic.GetDialogPage(id, pair);
-        public string PrivateMessageLogic_GetPersonalPage(int? id, int? page, Pair pair)
-        => PrivateMessageLogic.GetPersonalPage(id, page, pair);
-        public void NewPrivateMessageLogic_Start(int? id, Pair pair, string t)
-        => NewPrivateMessageLogic.Start(id, pair, t);
-        public void NewPrivateDialogLogic_Start(string nick, Pair pair, string msg)
-        => NewPrivateDialogLogic.Start(nick, pair, msg);
+        => Own.InRace.Unstable.StartProfileVoid(accountId, aboutMe, flags, file);
+        internal static int GetDialogPagesLengthFast()
+        => Fast.GetDialogPagesLengthLocked();
+        internal static void RegistrationPreRegistrationVoid(string captcha, string login,
+            string password, string secret, string nick)
+        => Own.InRace.Unstable.PreRegistrationVoid(captcha, login, password, secret, nick);
+        internal static void NewTopicStartVoid(string t, int? id, Pair pair, string m)
+        => Own.InRace.Unstable.StartNewTopicVoid(t, id, pair, m);
+        internal static string PrivateDialogGetDialogPageNullable(int? id, Pair pair)
+        => Own.InRace.Unstable.GetDialogPageNullable(id, pair);
+        internal static string PrivateMessageGetPersonalPageNullable(int? id, int? page, Pair pair)
+        => Own.InRace.Unstable.GetPersonalPageNullable(id, page, pair);
+        internal static void NewPrivateMessageStartVoid(int? id, Pair pair, string t)
+        => Own.InRace.Unstable.StartNewPrivateMessageVoid(id, pair, t);
+        internal static void NewPrivateDialogStartVoid(string nick, Pair pair, string msg)
+        => Own.InRace.Unstable.StartNewPrivateDialogVoid(nick, pair, msg);
     }
 }

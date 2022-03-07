@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Models
+namespace Own.Database
 {
     [Table("Endpoint_")]
     public partial class Endpoint

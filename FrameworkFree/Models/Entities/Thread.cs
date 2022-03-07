@@ -1,5 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
-namespace Models
+namespace Own.Database
 {
     public partial class Thread
     {

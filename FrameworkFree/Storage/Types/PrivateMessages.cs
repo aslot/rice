@@ -1,6 +1,7 @@
-namespace Data{
-public struct PrivateMessages
-        {
-            public string[] Messages;
-        }
-        }
+namespace Own.Types
+{
+    public struct PrivateMessages
+    {
+        public string[] Messages;
+    }
+}

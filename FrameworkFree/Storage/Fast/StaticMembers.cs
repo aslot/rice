@@ -46,6 +46,7 @@ namespace Own.Storage
         internal static string MainPageStatic;
         internal static string MainContentStatic;
         internal static string TempStatic;
+        internal static string ConnectionStringStatic;
         internal static int ThreadsCountStatic;
         internal static int PosStatic;
         internal static int DialogPagesLengthStatic;

@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Own.Database;
+using Own.Storage;
 namespace Inclusions
 {
     public partial class TotalForumDbContext : DbContext
@@ -25,10 +26,10 @@ namespace Inclusions
         public virtual DbSet<Profile> Profile { get; set; }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            if (!optionsBuilder.IsConfigured)
-            {
-                optionsBuilder.UseSqlServer("Server=127.0.0.1; Database=TotalForum;User ID=forumadminuser; Password=PasswordExample123~");
-            }
+            if (optionsBuilder.IsConfigured)
+            { }
+            else
+                optionsBuilder.UseSqlServer(Fast.GetConnectionStringLocked());
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

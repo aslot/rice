@@ -73,7 +73,7 @@ namespace Own.Permanent
                 + "<div class='p' title='Анкета' onClick='p();'>&#9786;</div>"//+"&#9829;" 
                                                                               //+"<div id='forward' title='Вперёд' onClick='forward();'>&#8618;</div>"
                 + "</header><div id='o'>";
-        public const string MainPageEnd = "</div><small><a id='m' href='mailto:russianloveforum@gmail.com'>Обратная связь</a></small>" +
+        public const string MainPageEnd = "</div><small><a id='m' href='mailto:mail@алексейлот.рф'>Обратная связь</a></small>" +
                 "<script src='m.js' async></script></body></html>";
         public const string NewDialog = "<div id='d'><span><a onclick=" +
                 "'k();return false;'>Новый диалог</a>" +

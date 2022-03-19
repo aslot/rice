@@ -6,8 +6,14 @@ using Microsoft.AspNetCore.ResponseCompression;
 using App.Controllers;
 using System.Threading.Tasks;
 using System.IO.Compression;
-var initializer = Task.Run(() => FriendlyFire.InitializeVoid());
-var builder = WebApplication.CreateBuilder(args);
+var builder = WebApplication.CreateBuilder();
+var initializer = Task.Run(() => FriendlyFire.InitializeVoid(builder.Configuration[
+#if DEBUG
+"TestConnectionString"
+#elif RELEASE
+"ProductionConnectionString"
+#endif
+]));
 builder.Services.AddDbContext<TotalForumDbContext>();
 builder.Services.AddMvc(options => options.EnableEndpointRouting = false);
 builder.Services.AddResponseCompression(options =>

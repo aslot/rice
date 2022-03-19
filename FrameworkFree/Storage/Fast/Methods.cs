@@ -15,6 +15,16 @@ namespace Own.Storage
             lock (LoginPasswordAccIdHashesLocker)
                 return LoginPasswordAccIdHashesStatic.ContainsKey(pair);
         }
+        internal static string GetConnectionStringLocked()
+        {
+            lock (ConnectionStringLocker)
+                return ConnectionStringStatic;
+        }
+        internal static void SetConnectionStringLocked(in string value)
+        {
+            lock (ConnectionStringLocker)
+                ConnectionStringStatic = value;
+        }
         internal static void LoginPasswordAccIdHashesAddLocked(in Pair pair, in int accountId)
         {
             lock (LoginPasswordAccIdHashesLocker)

@@ -5,6 +5,7 @@ using Microsoft.Extensions.Primitives;
 using System.Net;
 using Microsoft.AspNetCore.Http;
 using System.IO;
+using System.Diagnostics;
 namespace App.Controllers
 {
     public sealed class fController : Controller
@@ -63,6 +64,17 @@ namespace App.Controllers
 
             return Constants.SE;
         }
+
+#if DEBUG
+        [HttpGet]
+        public string memorytest()
+        {
+            Process currentProc = Process.GetCurrentProcess();
+            currentProc.Refresh();
+
+            return $"OS Version: {Environment.OSVersion}; PrivateMemorySize64 bytes: {currentProc.PrivateMemorySize64}; TotalMemory bytes: {GC.GetTotalMemory(true)}";
+        }
+#endif
 
         [HttpGet]
         public ContentResult r() // registrationpage

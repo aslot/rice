@@ -1,20 +1,4 @@
-﻿use master
-IF (EXISTS(SELECT TOP 1 1 FROM sys.sql_logins WHERE [name] = 'forumadminuser'))
-    DROP LOGIN forumadminuser;
-drop database if exists TotalForum;
-create database TotalForum;
-EXEC sp_configure 'CONTAINED DATABASE AUTHENTICATION', 1
-GO
-RECONFIGURE
-GO
-USE [master]
-GO
-ALTER DATABASE TotalForum SET CONTAINMENT = PARTIAL
-GO
-go
-use TotalForum;
-drop user if exists forumadminuser;
-drop table if exists Account;
+﻿drop table if exists Account;
 drop table if exists Forum;
 drop table if exists Thread;
 drop table if exists Msg;
@@ -23,11 +7,7 @@ drop table if exists PrivateMessage;
 drop table if exists LoginLog;
 drop table if exists BlockedIpHash;
 drop table if exists Profile;
-create login forumadminuser with password = 'PasswordExample123~';
-go
-create user forumadminuser for login forumadminuser;
-grant all to forumadminuser;
-exec sp_addrolemember 'db_owner', 'forumadminuser'
+
 go
 create table Account
 (

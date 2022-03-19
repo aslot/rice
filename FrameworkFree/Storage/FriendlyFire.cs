@@ -73,8 +73,10 @@ namespace App.Controllers
             Fast.InitializeDialogsToStartLocked();
             Fast.InitializeRemoteIpHashesAttemptsCounterLocked();
         }
-        internal static void InitializeVoid()
+        internal static void InitializeVoid(string connectionString)
         {
+            Fast.SetConnectionStringLocked(connectionString);
+
             lock (InitializationTransactionLocker)
             {
                 InitializeStorageVoid();

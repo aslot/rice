@@ -37,7 +37,7 @@
 Пакет Linux libgdiplus больше не требуется.
 
 Примеры команды публикации: <br>
-dotnet publish -r win-x86 -p:PublishSingleFile=false -p:PublishTrimmed=false --self-contained false -c Release
+dotnet publish -r win-x86 -p:PublishSingleFile=false -p:PublishTrimmed=false --self-contained false -c Release<br>
 На хостинге: dotnet publish -r win10-x86 -p:PublishSingleFile=true -p:PublishTrimmed=false --self-contained false -c Release -p:PublishReadyToRun=true
 
 #### Функциональность 

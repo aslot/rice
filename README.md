@@ -68,3 +68,5 @@ dotnet publish -r win-x86 -p:PublishSingleFile=false -p:PublishTrimmed=false --s
 редактирование анкеты профиля<br>
 <br>
 Требуется установить базу данных скриптом MSSQLSetup.sql для SQL Server и задать строки подключения к серверам баз данных (можо использовать одинаковые) для переменных среды RELEASE (Production) и DEBUG (Test).
+
+<br><b>This engine is still under development and strongly not recommended for production usage.</b>

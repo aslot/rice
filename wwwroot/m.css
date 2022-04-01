@@ -1,293 +1,281 @@
 ﻿* {
-        margin: 0;
-        padding: 0;
-    }
-    
-body
-    {
-        background-color:#FFFFFF;
-        line-height:1.5;
-        width:100%;
-        height: 100%;
-        word-wrap: break-word;
-    }
+    margin: 0;
+    padding: 0;
+    border: 0;
+    white-space: normal;
+}
 
-input, textarea
-{
+body,
+#o {
+    height: 100%;
+}
+
+body {
+    background-color: #FFFFFF;
+    line-height: 1.5;
+    width: 100%;
+    word-wrap: break-word;
+    font-family: "Candara";
+}
+
+input,
+textarea {
     border: 1px solid #D3D3D3;
 }
 
-#o
-    {
-        position:relative;
-        display: block;        
-        margin-left: auto;
-        margin-right: auto;
-        height: 100%;
-        width: 500px;
-    }
-
-.o span 
-    {
-        font-family: "Cambria";	
-        color: #FF0000;
-        display:inline;
-        cursor:pointer;
-        text-align: left;
-        font-size: 16pt;	
-    }
-
-.o p 
-    {        
-        display:inline;
-        cursor:pointer;        
-    }
-
-.o div 
-    {
-        margin-left: 1.5cm;
-        text-align: left;        
-		font-family: "Cambria";
-        font-size: 14pt;	
-        color: #FF0000;
-    }
-
-body h1 
-    {
-        text-align: center;
-        font-family: "Verdana";
-        font-size: 26pt;
-        font-style:italic;
-        font-variant:normal;
-        font-weight:normal;
-        font-stretch:normal;
-        width:7cm;
-        margin-left:auto;
-        margin-right:auto;
-		color: #FF0000;
-        cursor:pointer;
-        display:block;
-    }
-
-.p
-{
-        font-variant:normal;
-        font-weight:normal;
-        font-stretch:normal;
-        color: #FF0000;
-        cursor:pointer;        
-        text-align: center;        
-        font-size: 26pt;
-        display:inline;
+.o span,
+.o div,
+body h2 {
+    font-family: "Cambria";
 }
 
-header{
-    text-align:center;
-    cursor:default;
+#o {
+    position: relative;
 }
 
-#m
-    {       
-        width:3cm;       
-        text-align:center;  
-        font-family: "Candara";
-        font-size: xx-small;
-        display:block;
-        color:#D3D3D3;        
-        text-decoration: none;
-        margin-left:auto;
-        margin-right:auto;     
-    }
-
-.n center a
-    {
-        font-family: "Segoe UI Symbol";
-        cursor:pointer;
-        font-size: 26pt;
-        text-align:center;
-        width:0.5cm;
-        margin-left:auto;
-        margin-right:auto;
-        color:#FF0000;      
-        font-weight:bolder;  
-        font-stretch:ultra-expanded;
-        text-decoration: none;
-    }
-
-.n p 
-    {
-        display:inline;
-        cursor:pointer;
-        text-align: left;        
-		font-family: "Candara";
-        font-size: 14pt;	
-        color: #FF0000;
-    }
-
-.l a
-    {
-        color: #FF0000;
-        display:inline;
-        cursor:pointer;
-        text-align: left;
-        font-family: "Candara";
-        font-size: 14pt;	
-    }
-#g a, #r a
-{
-    color: #FF0000;
-        display:inline;
-        cursor:pointer;
-        text-align: center;
-        font-family: "Candara";
-        font-size: 14pt;	        
-}
-#g img, #r img
-{
-   display:inline;
+.o div {
+    margin-left: 5%;
 }
 
-.l span
-    {
-        color: #FF0000;
-        display:inline;
-        cursor:pointer;
-        text-align: left;
-        font-family: "Candara";
-        font-size: 14pt;	
-    }
+.o div,
+.n p,
+.l a,
+#g a,
+#r a,
+.l span,
+.l input,
+#g input,
+#r input,
+#s,
+#t p,
+#d p,
+#t input,
+#d input,
+#x,
+#c,
+#r div,
+.l p,
+#a span,
+#t span,
+#d span,
+#n {
+    font-size: medium;
+}
 
-.l input
-    {
-        width:150px;
-        height:30px;
-        font-family:"Candara";
-        font-size:14pt;
-    }
-#g input, #r input
- {
-        width:150px;
-        height:30px;
-        font-family:"Candara";
-        font-size:14pt;
-        margin-left:auto;
-        margin-right:auto;
-        display:inline;
-    }
+body h1,
+.p,
+#w a {
+    font-size: xx-large;
+}
 
-.l p
-    {
-        font-family: "Candara";
-        font-size: 14pt;	
-        text-align:justify;
-        text-indent: 1.5cm;        
-        color:#000000;        
-    }
+body h1,
+.p,
+body h2,
+#s {
+    font-variant: normal;
+    font-weight: normal;
+    font-stretch: normal;
+}
 
-center.l div, #c, #r div
-    {
-        font-family: "Candara";
-        font-size: 14pt;	
-        text-align:justify;
-        text-indent: 1.5cm;        
-        color:#000000;        
-    }
+body h1 {
+    font-family: "Verdana";
+    font-style: italic;
+    width: 25%;
+    min-width: 250px;
+}
 
-.l center a, #w a
-    {
-        font-family: "Segoe UI Symbol";
-        cursor:pointer;
-        font-size: 26pt;
-        width:0.5cm;
-        margin-left:auto;
-        margin-right:auto;
-        color:#FF0000;      
-        font-weight:bolder;  
-        font-stretch:ultra-expanded;
-        text-decoration: none;
-    }
+.p {
+    text-align: center;
+}
 
-body h2
-    {
-        text-align: left;
-        font-family: "Cambria";
-        font-size: 16pt;
-        font-style:normal;
-        font-variant:normal;
-        font-weight:normal;
-        font-stretch:normal;
-        margin-left:0;
-        margin-right:auto;
-		color: #FF0000;
-        cursor:pointer;
-    }
-.s 
-    {
-        display:none;
-        color:#FFFFFF;
-    }
-#x{
-    width:500px;
-    height:80px;
-    resize:vertical;
-    font-family: "Candara";
-    font-size: 14pt;	
-    text-align:justify;
-    text-indent: 1.5cm;        
-    color:#000000; 
+header {
+    text-align: center;
+    cursor: default;
+}
+
+#m {
+    min-width: 3cm;
+    width: 10%;
+    font-size: x-small;
+    color: #D3D3D3;
+    text-decoration: none;
+}
+
+.n p,
+.l a,
+.o div,
+.l span,
+body h2,
+.o span {
+    text-align: left;
+}
+
+#g a,
+#r a {
+    text-align: center;
+}
+
+.l input,
+#g input,
+#r input,
+#t input,
+#d input {
+    min-width: 150px;
+    min-height: 30px;
+    width: 25%;
+    height: 5%;
+}
+
+body h2 {
+    font-style: normal;
+    margin-left: 0;
+    margin-right: auto;
+}
+
+body h2,
+.o span {
+    font-size: large;
+}
+
+.s {
+    display: none;
+    color: #FFFFFF;
+}
+
+#x {
+    min-height: 80px;
+    resize: vertical;
+}
+
+#r img {
+    min-width: 150px;
+    width: 25%;
 }
 
 .x {
-    width:500px;
-    height:809px;
-    border:0px;
+    min-height: 809px;
+    width: 80%;
 }
 
-#s{
+#w a,
+#g input,
+#r input,
+#m,
+body h1,
+#o {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#t p,
+#d p,
+#t input,
+#d input,
+#x,
+#c,
+#r div,
+.l p {
+    text-align: justify;
+    color: #000000;
+}
+
+#t p,
+#d p,
+#c,
+#r div,
+.l p,
+#x {
+    text-indent: 5%;
+}
+
+#a span,
+#t span,
+#d span,
+#n,
+#s,
+body h2,
+#w a,
+.l span,
+#g a,
+#r a,
+.l a,
+.n p,
+body h1,
+.o div,
+.o span,
+.p {
     color: #FF0000;
-    display:inline;  
-    font-family: "Candara";
-    font-size: 14pt;	
-    font-weight:normal;
-    font-stretch:normal;
 }
 
-#t input, #d input {
-    width:500px;
-    height:30px;
-    font-family: "Candara";
-    font-size: 14pt;	
-    text-align:justify;       
-    color:#000000; 
+#a span,
+#t span,
+#d span,
+#n {
+    cursor: default;
 }
 
-#t p, #d p {
-    font-family: "Candara";
-    font-size: 14pt;	
-    text-align:justify;
-    text-indent: 1.5cm;        
-    color:#000000;
+
+#t a,
+#d a,
+#n a,
+#t span,
+#d span,
+body h2,
+#w a,
+.l span,
+#g a,
+#r a,
+.l a,
+.o span,
+.n p,
+.p,
+body h1,
+.o p {
+    cursor: pointer;
 }
-#t span, #d span, #n{
-    color: #FF0000;
+
+div#g,
+div#r,
+#w,
+body h1,
+#m {
+    text-align: center;
+}
+
+div#g,
+div#r,
+#w,
+body h1,
+#m,
+#a span,
+#t span,
+#d span,
+#n,
+#o {
     display: block;
-    font-family: "Candara";
-    font-size: 14pt;
-    text-align:center;
-    cursor:default;
 }
-#a span{
-    color: #FF0000;
-    display: block;
-    font-family: "Candara";
-    font-size: 14pt;
-    cursor:default;
+
+.p,
+#s,
+#g input,
+#r input,
+.l span,
+#g img,
+#r img,
+#g a,
+#r a,
+.l a,
+.n p,
+.o p,
+.o span {
+    display: inline;
 }
-#t a, #d a, #n a{
-        cursor: pointer;
-}
-div#g,div#r, #w
-{
-    display:block;
-    text-align:center;
+
+#o,
+#t input,
+#d input,
+.x,
+#x {
+    width: 60%;
+    min-width: 450px;
 }

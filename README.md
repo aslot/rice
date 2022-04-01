@@ -2,11 +2,11 @@
 
 ## Простой и быстрый форум для эксплуатации в условиях высокой нагрузки
 
-### Версия 1.0.0.3 для asp.net core mvc 6
+### Версия 1.0.1.0 для asp.net core mvc 6
 
 Код последней версии опубликован на самом дешёвом российском shared-хостинге по адресу <a href="https://форумлюбви.рф">https://форумлюбви.рф</a>
 
-Ветвь net6_0 - версия 1.0.0.3 для asp.net core mvc 6<br>
+Ветвь net6_0 - версия 1.0.1.0 для asp.net core mvc 6<br>
 
 Определение номера версии:<br>
 Номер состоит из четырёх неотрицательных целых чисел, разделённых точкой, и соответствует шаблону A.B.C.D, где A обозначает номер улучшения или исправления безопасности, B - номер улучшения или исправления функционала, С - номер улучшения или исправления производительности, D - номер прочих улучшений и исправлений (D = 0 - релиз, иначе - beta-версия), причём увеличение одного из чисел старших разрядов номера версии обнуляет все младшие разрады. К примеру, если обновляется функционал и добавляются прочие исправления, но не изменяется производительность, то инкрементируется номер обновления функционала, как более важный параметр.<br>
@@ -37,7 +37,7 @@
 Пакет Linux libgdiplus больше не требуется.
 
 Примеры команды публикации: <br>
-dotnet publish -r win-x86 -p:PublishSingleFile=false -p:PublishTrimmed=false --self-contained false -c Release<br>
+dotnet publish -r win-x86 -p:PublishSingleFile=false -p:PublishTrimmed=false --self-contained false -c Release
 На хостинге: dotnet publish -r win10-x86 -p:PublishSingleFile=true -p:PublishTrimmed=false --self-contained false -c Release -p:PublishReadyToRun=true
 
 #### Функциональность 
@@ -68,3 +68,5 @@ dotnet publish -r win-x86 -p:PublishSingleFile=false -p:PublishTrimmed=false --s
 редактирование анкеты профиля<br>
 <br>
 Требуется установить базу данных скриптом MSSQLSetup.sql для SQL Server и задать строки подключения к серверам баз данных (можо использовать одинаковые) для переменных среды RELEASE (Production) и DEBUG (Test).
+
+<br><b>This engine is still under development and strongly not recommended for production usage.</b>

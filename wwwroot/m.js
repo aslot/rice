@@ -1,13 +1,11 @@
-﻿"use strict"
-
-var o = "o";
-var T = true;
-var H = 300000;
-var Z = 0;
-var g = "GET";
-var P = "POST";
-var D = window.document;
-var a = undefined;
+﻿var o = "o",
+    T = true,
+    H = 300000,
+    Z = 0,
+    g = "GET",
+    P = "POST",
+    D = window.document,
+    a = undefined;
 
 function w(x, u, e) {
     if (e === undefined) {
